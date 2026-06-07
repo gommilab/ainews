@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 뉴스 브리핑 — 글로벌 AI 동향 데일리</title>
+<meta name="description" content="글로벌 AI 뉴스 매체·국내·기술·정책을 매일 한 장으로. 일일/주간 리포트 포털.">
+<meta property="og:title" content="🗞️ AI 뉴스 브리핑">
+<meta property="og:description" content="글로벌 AI 동향을 매일 아침 한 장으로 — 일일·주간 리포트">
+<meta property="og:type" content="website">
+<style>
+:root{--bg:#0b1220;--panel:#0f172a;--card:#fff;--line:#e2e8f0;--ink:#0f172a;--mut:#64748b;--blue:#2563eb}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Malgun Gothic',sans-serif;color:var(--ink);background:#f4f6f9;line-height:1.65}
+a{text-decoration:none;color:inherit}
+.nav{position:sticky;top:0;z-index:20;background:rgba(15,23,42,.92);backdrop-filter:blur(8px);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 22px}
+.nav .brand{font-weight:800;font-size:17px}
+.nav .links{display:flex;gap:18px;font-size:14px;color:#cbd5e1}
+.nav .links a:hover{color:#fff}
+.hero{background:radial-gradient(1200px 500px at 70% -10%,#3b82f6 0%,#1e3a8a 45%,#0b1220 100%);color:#fff;padding:72px 22px 80px;text-align:center}
+.hero .eyebrow{display:inline-block;font-size:13px;letter-spacing:.5px;color:#bfdbfe;border:1px solid rgba(191,219,254,.35);border-radius:999px;padding:5px 14px;margin-bottom:20px}
+.hero h1{margin:0 0 14px;font-size:clamp(28px,5vw,46px);font-weight:800;letter-spacing:-1px}
+.hero p{margin:0 auto;max-width:640px;font-size:clamp(15px,2.3vw,18px);color:#dbeafe}
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;padding:13px 24px;border-radius:12px;transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{background:#fff;color:#1e3a8a;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.btn.ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.4)}
+.btn.disabled{opacity:.55;cursor:not-allowed;pointer-events:none}
+.note{margin-top:16px;font-size:12.5px;color:#93c5fd}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+.section{padding:56px 0}
+.section h2{font-size:24px;font-weight:800;margin:0 0 8px;text-align:center}
+.section .sub{color:var(--mut);text-align:center;margin:0 0 32px}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.fcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+.fcard .ic{font-size:30px}
+.fcard h3{margin:12px 0 6px;font-size:17px}
+.fcard p{margin:0;color:#475569;font-size:14px}
+.sources{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:8px}
+.scol{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.scol .tag{display:inline-block;font-size:12px;font-weight:800;border-radius:8px;padding:3px 10px;color:#fff;margin-bottom:12px}
+.scol ul{margin:0;padding-left:18px;color:#475569;font-size:14px}
+.scol li{margin:3px 0}
+.crit{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.crit .box{border-radius:16px;padding:22px;border:1px solid var(--line);background:var(--card)}
+.crit .box.in{border-left:5px solid #16a34a}
+.crit .box.out{border-left:5px solid #dc2626}
+.crit h3{margin:0 0 10px;font-size:16px}
+.crit p{margin:0;color:#475569;font-size:14px}
+.preview{background:var(--panel);color:#fff;border-radius:18px;padding:32px;text-align:center}
+.preview h2{color:#fff}
+.preview .sub{color:#94a3b8}
+.flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:8px;color:#475569;font-size:14px}
+.flow .step{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-weight:600}
+.flow .arr{color:#94a3b8}
+footer{background:#0b1220;color:#94a3b8;text-align:center;padding:32px 22px;font-size:13px}
+footer a{color:#cbd5e1;text-decoration:underline}
+@media(max-width:560px){.crit{grid-template-columns:1fr}.nav .links{display:none}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="#top">🗞️ AI 뉴스 브리핑</a>
+  <div class="links">
+    <a href="#features">기능</a>
+    <a href="#sources">소스</a>
+    <a href="#criteria">큐레이션</a>
+    <a href="preview/2026-06-07.html">미리보기</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <span class="eyebrow">매일 06:00 KST · 글로벌 AI 동향 데일리</span>
+  <h1>글로벌 AI 동향을<br>매일 아침 한 장으로.</h1>
+  <p>세계 주요 매체·국내·기술·정책을 큐레이션해 한글 뉴스카드로 묶어 드립니다.
+     읽는 데 1분, 놓치는 이슈는 0.</p>
+  <div class="cta">
+    <!-- LIVE_PORTAL_URL: GCP Cloud Run 배포 후 아래 a 태그의 href와 class를 교체 -->
+    <a class="btn primary disabled" id="portal-btn" href="#" title="GCP Cloud Run 배포 예정">🚀 라이브 포털 열기</a>
+    <a class="btn ghost" href="preview/2026-06-07.html">📄 최신 브리핑 미리보기</a>
+  </div>
+  <div class="note" id="portal-note">라이브 포털(일일·주간 리포트)은 Google Cloud Run 배포 후 연결됩니다.</div>
+</header>
+
+<main>
+<section class="section" id="features">
+  <div class="wrap">
+    <h2>무엇을 받게 되나요</h2>
+    <p class="sub">발견 → 확인 → 해석. 신뢰할 수 있는 뉴스만 골라 드립니다.</p>
+    <div class="feat">
+      <div class="fcard"><div class="ic">📅</div><h3>일일 리포트</h3><p>매일 아침, 그날의 핵심 AI 소식을 섹션별 카드로. 제목·이미지·요약 한눈에.</p></div>
+      <div class="fcard"><div class="ic">📊</div><h3>주간 리포트</h3><p>ISO 주 단위로 한 주의 흐름을 집계. 큰 그림과 반복되는 신호를 포착.</p></div>
+      <div class="fcard"><div class="ic">🎯</div><h3>엄선 큐레이션</h3><p>모델 출시·투자·반도체·규제·소송·논문 등 영향 있는 뉴스만. 과장·홍보·루머 제외.</p></div>
+      <div class="fcard"><div class="ic">🇰🇷</div><h3>한국 연관 우선</h3><p>삼성·SK하이닉스·HBM 등 한국 기업·공급망에 직결되는 글로벌 뉴스를 강조.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sources" style="background:#eef2f7">
+  <div class="wrap">
+    <h2>커버하는 소스</h2>
+    <p class="sub">글로벌 매체를 메인으로, 국내·기술·정책까지.</p>
+    <div class="sources">
+      <div class="scol"><span class="tag" style="background:#2563eb">🌐 글로벌 매체</span>
+        <ul><li>Reuters / AP</li><li>Financial Times</li><li>Wall Street Journal</li><li>The Information</li><li>TechCrunch</li><li>Semafor</li></ul></div>
+      <div class="scol"><span class="tag" style="background:#0891b2">📰 국내</span>
+        <ul><li>AI타임스</li></ul>
+        <span class="tag" style="background:#7c3aed;margin-top:14px">🛠️ 기술 동향</span>
+        <ul><li>🤗 HuggingFace</li><li>🐙 GitHub 트렌딩</li><li>📄 arXiv 신규 논문</li></ul></div>
+      <div class="scol"><span class="tag" style="background:#9333ea">🏛️ 글로벌 AI 정책</span>
+        <ul><li>🇺🇸 미국</li><li>🇪🇺 EU</li><li>🇨🇳 중국</li><li>🇯🇵 일본</li><li>🇬🇧 영국</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="criteria">
+  <div class="wrap">
+    <h2>큐레이션 기준</h2>
+    <p class="sub">매체로 발견하고 · 공식 원문으로 확인하고 · 연구·정책으로 해석합니다.</p>
+    <div class="crit">
+      <div class="box in"><h3>✅ 포함</h3><p>새 모델 출시 · 대규모 투자/인수합병 · 반도체·데이터센터·전력 · 정부 규제 · 소송 · 안전성 사고 · 주요 논문 · 기업 도입 사례 · 노동시장 영향 · 한국 연관 글로벌 공급망</p></div>
+      <div class="box out"><h3>🚫 제외</h3><p>단순 기능 업데이트 · 출처 없는 루머 · "AI가 세상을 바꾼다"식 과장 칼럼 · 홍보성 기사 · 벤치마크 숫자만 있고 실사용성 불분명한 기사</p></div>
+    </div>
+    <div class="flow">
+      <span class="step">① 매체로 발견</span><span class="arr">→</span>
+      <span class="step">② 공식 원문으로 확인</span><span class="arr">→</span>
+      <span class="step">③ 연구·정책으로 해석</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:#eef2f7">
+  <div class="wrap">
+    <div class="preview">
+      <h2>📄 오늘의 브리핑 미리보기</h2>
+      <p class="sub">2026-06-07 · 글로벌 5 · AI타임스 3 · 기술 6 · 정책 5 = 총 19건</p>
+      <a class="btn primary" href="preview/2026-06-07.html">전체 브리핑 보기 →</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  harness-ainews-brief · 매일 06:00 KST 자동 수집·발송 · 수신 gommi72@naver.com<br>
+  <a href="https://github.com/gommilab/ainews">GitHub</a> · 라이브 포털은 Google Cloud Run 배포 예정
+</footer>
+
+</body>
+</html>
