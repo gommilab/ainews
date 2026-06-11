@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""정적 digest 포털 빌더 — GitHub Pages 게시용.
+"""정적 digest 포털 빌더 — GitHub Pages 게시용 (저장소 영속).
 
-_workspace/{date}/digest-{round}/05_index.json + 05_digest.pdf 를 읽어:
-  1) reports/{date}/digest-{round}.pdf 로 PDF 복사(Pages가 직접 서빙·다운로드)
-  2) digest.html (최신순 목록 + PDF 링크) 생성
+핵심: 원격 루틴은 매번 새 클론 + _workspace는 gitignore라 휘발된다.
+따라서 발행물은 reports/ 아래에 '저장소에 커밋되는' 형태로 영속한다.
 
-원격 루틴이 PDF 생성 후 이 스크립트를 돌려 결과를 저장소에 커밋하면,
-GitHub Pages가 https://gommilab.github.io/ainews/digest.html 과
-reports/.../*.pdf 를 공개 서빙한다. 외부 의존성 없음(표준 라이브러리).
+동작:
+  1) 신규 반영: _workspace/{date}/digest-{round}/ 의 05_index.json + 05_digest.pdf 를
+     reports/{date}/digest-{round}.pdf 와 reports/{date}/digest-{round}.json 으로 복사·기록.
+  2) 목록 생성: reports/ 전체(과거 커밋분 포함)를 스캔해 digest.html 을 누적 렌더.
+
+→ 매 회차 reports/ 에 파일이 쌓이고 digest.html 이 전체 이력을 보여준다.
+GitHub Pages가 digest.html 과 reports/.../*.pdf 를 공개 서빙·다운로드.
+외부 의존성 없음(표준 라이브러리).
 
 실행:  python3 webapp/build_digest_static.py
 """
@@ -29,12 +33,12 @@ def esc(s):
     return html.escape(str(s or ""))
 
 
-def collect():
-    """digest-{round} 폴더들을 스캔해 메타+PDF경로 목록을 최신순 반환."""
-    items = []
+def ingest_from_workspace():
+    """_workspace의 신규 digest를 reports/(영속)로 복사·기록."""
     if not os.path.isdir(WORKSPACE):
-        return items
-    for date in sorted(os.listdir(WORKSPACE), reverse=True):
+        return 0
+    n = 0
+    for date in os.listdir(WORKSPACE):
         if not DATE_RE.match(date):
             continue
         ddir = os.path.join(WORKSPACE, date)
@@ -52,16 +56,41 @@ def collect():
                 meta = json.load(open(idx, encoding="utf-8"))
             except Exception:
                 continue
-            rel_pdf = None
+            dst_dir = os.path.join(REPORTS, date)
+            os.makedirs(dst_dir, exist_ok=True)
             if os.path.isfile(pdf):
-                dst_dir = os.path.join(REPORTS, date)
-                os.makedirs(dst_dir, exist_ok=True)
-                dst = os.path.join(dst_dir, f"digest-{rnd}.pdf")
-                shutil.copyfile(pdf, dst)
-                rel_pdf = f"reports/{date}/digest-{rnd}.pdf"
-            meta.update({"_date": date, "_round": rnd, "_pdf": rel_pdf})
+                shutil.copyfile(pdf, os.path.join(dst_dir, f"digest-{rnd}.pdf"))
+                meta["pdf"] = f"reports/{date}/digest-{rnd}.pdf"
+            meta["date"], meta["round"] = date, rnd
+            json.dump(meta, open(os.path.join(dst_dir, f"digest-{rnd}.json"), "w",
+                                 encoding="utf-8"), ensure_ascii=False, indent=2)
+            n += 1
+    return n
+
+
+def load_all_reports():
+    """reports/ 전체(커밋된 이력 포함)에서 메타를 모아 최신순 반환."""
+    items = []
+    if not os.path.isdir(REPORTS):
+        return items
+    for date in os.listdir(REPORTS):
+        if not DATE_RE.match(date):
+            continue
+        ddir = os.path.join(REPORTS, date)
+        for f in os.listdir(ddir):
+            m = re.match(r"^digest-(am|pm)\.json$", f)
+            if not m:
+                continue
+            try:
+                meta = json.load(open(os.path.join(ddir, f), encoding="utf-8"))
+            except Exception:
+                continue
+            meta.setdefault("date", date)
+            meta.setdefault("round", m.group(1))
+            pdf_path = os.path.join(ddir, f"digest-{meta['round']}.pdf")
+            meta["_has_pdf"] = os.path.isfile(pdf_path)
             items.append(meta)
-    items.sort(key=lambda x: (x["_date"], x["_round"]), reverse=True)
+    items.sort(key=lambda x: (x.get("date", ""), x.get("round", "")), reverse=True)
     return items
 
 
@@ -92,13 +121,15 @@ def render(items):
     if items:
         cards = []
         for it in items:
-            d, rnd = it["_date"], it["_round"]
+            d, rnd = it.get("date"), it.get("round")
             badges = (f'<span class="badge b-src">{esc(it.get("primary_source"))}</span>'
                       f'<span class="badge b-kind">{esc(it.get("topic_kind"))}</span>'
                       f'<span class="badge b-lens">{esc(it.get("perspective"))} 관점</span>')
-            dl = (f'<a class="dl" href="{esc(it["_pdf"])}" target="_blank">📄 PDF 다운로드 '
-                  f'({esc(it.get("pages"))}p)</a>') if it.get("_pdf") else \
-                 '<span style="color:#ef4444;font-size:13px">PDF 준비 중</span>'
+            if it.get("_has_pdf") and it.get("pdf"):
+                dl = (f'<a class="dl" href="{esc(it["pdf"])}" target="_blank">📄 PDF 다운로드 '
+                      f'({esc(it.get("pages"))}p)</a>')
+            else:
+                dl = '<span style="color:#ef4444;font-size:13px">PDF 준비 중</span>'
             cards.append(f"""<div class="card">
 <div class="meta">📡 {esc(d)} · {ROUND_KO.get(rnd, rnd)} 회차</div>
 <div class="ttl">{esc(it.get("headline_ko"))}</div>
@@ -122,13 +153,13 @@ def render(items):
 
 
 def main():
-    items = collect()
+    ingested = ingest_from_workspace()
+    items = load_all_reports()
     open(OUT_HTML, "w", encoding="utf-8").write(render(items))
-    print(f"[ok] digest.html 생성 · 브리프 {len(items)}건 · PDF "
-          f"{sum(1 for x in items if x.get('_pdf'))}건 → reports/")
-    for it in items:
-        print(f"   - {it['_date']} {it['_round']}: {it.get('headline_ko','')[:40]} "
-              f"({it.get('_pdf') or 'PDF 없음'})")
+    print(f"[ok] 신규 반영 {ingested}건 · 포털 총 {len(items)}건 → digest.html (reports/ 영속)")
+    for it in items[:6]:
+        print(f"   - {it.get('date')} {it.get('round')}: "
+              f"{(it.get('headline_ko') or '')[:38]} (pdf={'O' if it.get('_has_pdf') else 'X'})")
 
 
 if __name__ == "__main__":
