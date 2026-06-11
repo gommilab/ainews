@@ -1,0 +1,89 @@
+# 원천 소스 레지스트리 — "AI 원천 동향 데일리(PDF)" 감시 대상의 단일 소스(SoT).
+# aitimes.kr이 한글화하기 전의 상류 1차 원천. scan_sources.py가 feed: rss 항목을 파싱한다.
+# feed: scrape 항목은 RSS가 없어 에이전트가 WebFetch로 url을 직접 확인한다.
+# 새 원천 추가/삭제는 이 파일만 고치면 된다.
+
+# ── 직접 스캔 계층 (이 스킬이 담당) ──────────────────────────────
+corporate:
+  - name: Anthropic
+    url: https://www.anthropic.com/news
+    feed: scrape            # 공개 RSS 불안정 → 뉴스 페이지 폴링
+    topics: [model, safety, research]
+  - name: OpenAI
+    url: https://openai.com/news/
+    rss: https://openai.com/blog/rss.xml
+    feed: rss
+    topics: [model, product, research]
+  - name: Google DeepMind
+    url: https://deepmind.google/discover/blog/
+    rss: https://deepmind.google/blog/rss.xml
+    feed: rss
+    topics: [model, research]
+  - name: Google AI / Research
+    url: https://blog.google/technology/ai/
+    rss: https://blog.google/technology/ai/rss/
+    feed: rss
+    topics: [model, product]
+  - name: Meta AI
+    url: https://ai.meta.com/blog/
+    feed: scrape
+    topics: [model, opensource, research]
+  - name: Microsoft AI
+    url: https://blogs.microsoft.com/ai/
+    rss: https://blogs.microsoft.com/ai/feed/
+    feed: rss
+    topics: [product, enterprise]
+  - name: AWS Machine Learning
+    url: https://aws.amazon.com/blogs/machine-learning/
+    rss: https://aws.amazon.com/blogs/machine-learning/feed/
+    feed: rss
+    topics: [infra, product, enterprise]
+  - name: NVIDIA
+    url: https://blogs.nvidia.com/blog/category/deep-learning/
+    rss: https://blogs.nvidia.com/feed/
+    feed: rss
+    topics: [infra, chip, model]
+  - name: Samsung
+    url: https://news.samsung.com/global/category/business/semiconductor
+    rss: https://news.samsung.com/global/feed
+    feed: rss
+    topics: [chip, device, supply-chain]
+  - name: Bosch
+    url: https://www.bosch-presse.de/pressportal/de/en/
+    feed: scrape
+    topics: [robot, manufacturing, mobility]
+
+conference:
+  # 진행 중/임박 행사의 발표·키노트 페이지를 폴링. 행사 시즌에만 활성.
+  - name: AWS re:Invent
+    url: https://reinvent.awsevents.com/
+    feed: scrape
+    topics: [infra, product]
+  - name: Google I/O
+    url: https://io.google/
+    feed: scrape
+    topics: [model, product]
+  - name: NVIDIA GTC
+    url: https://www.nvidia.com/gtc/
+    feed: scrape
+    topics: [chip, infra, model]
+  - name: Bosch Connected World
+    url: https://www.bosch-connectedworld.com/
+    feed: scrape
+    topics: [robot, mobility, iot]
+
+# ── 재활용 계층 (기존 수집가가 채움 — 여기선 참고용 메타만) ──────────
+# government → policy-collector / policy-collection 스킬
+# media      → global-news-collector / global-news-collection 스킬
+# opensource → news-collector / news-collection 스킬 (arxiv, huggingface, github)
+reuse:
+  government:
+    collector: policy-collector
+    out: 01_scan_policy.json
+  media:
+    collector: global-news-collector
+    out: 01_scan_global.json
+  opensource:
+    collector: news-collector
+    sources: [arxiv, huggingface, github]
+    out: 01_scan_opensource_{source}.json

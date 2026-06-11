@@ -1,0 +1,70 @@
+<!--
+  AI 뉴스 브리핑 이메일 템플릿 (인라인 CSS, table 기반)
+  editor는 아래 마커를 실제 내용으로 치환한다:
+    {{DATE_KO}}        예: 2026년 6월 7일 (토)
+    {{HIGHLIGHT}}      오늘의 하이라이트 1~2문장
+    {{TOTAL}}          전체 카드 수
+    {{SECTIONS}}       섹션 HTML 묶음 (아래 SECTION/CARD 패턴 반복)
+  색 토큰: 배경 #f4f5f7 / 카드 #ffffff / 강조 #2563eb / 본문 #1f2933 / 보조 #6b7280
+-->
+<div style="margin:0;padding:0;background:#f4f5f7;font-family:'Apple SD Gothic Neo','Malgun Gothic',Roboto,Helvetica,Arial,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f5f7;padding:24px 0;">
+    <tr><td align="center">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;">
+
+        <!-- 헤더 -->
+        <tr><td style="background:#111827;border-radius:12px 12px 0 0;padding:28px 28px 22px;">
+          <div style="color:#ffffff;font-size:22px;font-weight:800;">🗞️ AI 뉴스 브리핑</div>
+          <div style="color:#9ca3af;font-size:14px;margin-top:6px;">{{DATE_KO}} · 오늘의 AI 소식 {{TOTAL}}건</div>
+          <div style="color:#e5e7eb;font-size:14px;line-height:1.6;margin-top:14px;padding:12px 14px;background:#1f2937;border-radius:8px;">
+            ☀️ <b>오늘의 하이라이트</b><br>{{HIGHLIGHT}}
+          </div>
+        </td></tr>
+
+        <!-- 본문 섹션들 -->
+        <tr><td style="background:#f4f5f7;padding:0;">
+          {{SECTIONS}}
+        </td></tr>
+
+        <!-- 푸터 -->
+        <tr><td style="background:#111827;border-radius:0 0 12px 12px;padding:20px 28px;">
+          <div style="color:#9ca3af;font-size:12px;line-height:1.6;">
+            이 브리핑은 매일 오전 7시(KST) 자동 발송됩니다.<br>
+            소스: AI타임스 · HuggingFace · GitHub · arXiv · 글로벌 AI 정책(미국·EU·중국·일본·영국)
+          </div>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</div>
+
+<!--
+  ===== SECTION 패턴 (소스마다 1개) =====
+  <div style="margin:0 0 4px;padding:22px 4px 10px;">
+    <span style="font-size:17px;font-weight:800;color:#111827;">{{SECTION_EMOJI}} {{SECTION_TITLE}}</span>
+  </div>
+  {{CARDS}}   ← 카드 반복. 0건이면: <div style="color:#6b7280;font-size:14px;padding:8px 4px;">오늘은 새 소식이 없습니다.</div>
+
+  ===== CARD 패턴 =====
+  카드는 반드시 테두리(border)로 영역을 구분한다: border:1px solid #d7dbe0.
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;border:1px solid #d7dbe0;border-radius:10px;margin:0 0 14px;box-shadow:0 1px 3px rgba(0,0,0,0.07);overflow:hidden;">
+    <tr><td style="padding:0;">
+      <!-- 이미지가 있으면: -->
+      <img src="{{IMAGE_URL}}" alt="{{TITLE}}" style="display:block;width:100%;max-width:100%;height:auto;max-height:280px;object-fit:cover;border-radius:10px 10px 0 0;">
+      <!-- 이미지가 없으면 폴백 배지: -->
+      <div style="height:96px;border-radius:10px 10px 0 0;background:{{BADGE_BG}};text-align:center;line-height:96px;font-size:40px;">{{BADGE_EMOJI}}</div>
+    </td></tr>
+    <tr><td style="padding:16px 18px 18px;">
+      <a href="{{URL}}" style="color:#111827;font-size:16px;font-weight:700;text-decoration:none;line-height:1.4;">{{TITLE}}</a>
+      <div style="color:#374151;font-size:14px;line-height:1.7;margin-top:8px;">{{SUMMARY}}</div>
+      <div style="margin-top:12px;font-size:12px;color:#6b7280;">
+        <a href="{{URL}}" style="color:#2563eb;text-decoration:none;font-weight:600;">🔗 원문 보기</a>
+        &nbsp;·&nbsp; {{PUBLISHED}} &nbsp;·&nbsp; {{SOURCE_LABEL}}
+      </div>
+    </td></tr>
+  </table>
+
+  폴백 배지 색({{BADGE_BG}}): aitimes #fde68a / huggingface #fed7aa / github #e5e7eb / arxiv #bfdbfe / policy #c7d2fe
+  폴백 이모지({{BADGE_EMOJI}}): 📰 / 🤗 / 🐙 / 📄 / 🏛️
+-->

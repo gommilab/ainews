@@ -1,0 +1,33 @@
+# harness-ainews-brief
+
+## 하네스: AI 뉴스 브리핑
+
+**목표:** 매일 06:00 KST에 글로벌 AI 뉴스 매체(Reuters/AP·FT·WSJ·The Information·TechCrunch·Semafor)를 메인으로, AI타임스·기술동향(HuggingFace·GitHub·arXiv)·5개국(미국·EU·중국·일본·영국) AI 정책 소식을 한글 뉴스카드(제목·이미지·요약)로 묶어 HTML 메일로 gommi72@naver.com에 발송한다.
+
+**트리거:** AI 뉴스/글로벌 AI 동향 브리핑 생성·발송·재실행·부분수정 요청, 또는 매일 06:00 KST 예약 실행 시 `ainews-orchestrator` 스킬을 사용하라. 단순 질문은 직접 응답 가능.
+
+**고정 설정:** 수신자 `gommi72@naver.com` · 발송 계정 사용자 Gmail(choihs72@gmail.com) · 글로벌 매체 5건(메인)·AI타임스 3건·기술동향 각 2건·정책 국가별 1~2건 · 글로벌 선별기준(모델출시·투자/M&A·반도체/인프라·규제·소송·안전·논문·도입사례·노동시장·한국 공급망) + 3단계 검증(매체 발견→공식 원문 확인→해석) · 작업폴더 `_workspace/{YYYY-MM-DD}/`(KST 기준).
+
+## 하네스: AI 원천 동향 데일리 (PDF 심층 브리프)
+
+**목표:** aitimes.kr이 한글화하기 전의 상류 1차 원천(기업 공식·컨퍼런스·정부·외신·연구/오픈소스)을 직접 감시해, 그날 가장 핫한 AI 이슈 **1건**을 선별하고 deep-research 방법론으로 심층 분석한 **A4 1~2p PDF 분석 브리프**를 만들어 웹포털(`webapp/`)에 게시한다(필요 시 PDF 다운로드). 독자=과학기술 연구자·정책자.
+
+**트리거:** "원천 동향/심층 브리프 만들어", "오늘의 핵심 이슈 분석", "원천 PDF 리포트", 하루 2회(아침·저녁) 예약, 그리고 "원천 브리프 다시/재실행/저녁 회차/관점 바꿔/더 깊게/단신 보강/1위 말고 N위로" 등 후속 요청 시 `source-digest-orchestrator` 스킬을 사용하라. (광역 HTML 메일 브리핑은 `ainews-orchestrator`.)
+
+**고정 설정:** 전달=웹포털 아카이브+on-demand PDF(메일 없음) · 핫이슈 1건 심층(7섹션:TL;DR→사실→기술핵심→맥락→함의→한계·전망→출처)+푸터 단신 2~3건 · 함의는 주제 적응형 관점(모델/기술/논문→🔬연구·개발, 규제/표준/투자→🏛정책) · 분량 무조건 1~2p 고정 · 원천 레지스트리=`source-pdf-digest/references/sources.yaml` · 산출물 `_workspace/{YYYY-MM-DD}/digest-{am|pm}/` · 신규검출 state `_workspace/.source_digest_state.json` · 설계 스펙 `docs/source-digest-service-design.md`.
+
+**변경 이력:**
+| 날짜 | 변경 내용 | 대상 | 사유 |
+|------|----------|------|------|
+| 2026-06-07 | 초기 구성 (수집×2·편집·발송 에이전트, 수집/정책/조립/발송/오케스트레이터 스킬, 07:00 KST 예약) | 전체 | - |
+| 2026-06-07 | 카드 테두리 추가 + 실제 대표 이미지 추출 강화(og/twitter/본문img 체인, arXiv→HF papers 썸네일, extract_og_image.sh 번들) | brief-composition(템플릿+스킬), news-collection(스킬+scripts), policy-collection | 사용자 피드백: 카드 영역 구분·실제 이미지 |
+| 2026-06-07 | 발송 방식 SMTP 자동발송으로 전환(send_brief_smtp.py 번들, 환경변수 SMTP_USER/SMTP_PASS, 전용 발송계정). 예약 routine 프롬프트도 SMTP로 갱신. Gmail MCP는 드래프트(수동/테스트)로 강등 | email-delivery(스킬+scripts), mail-dispatcher, 원격 routine | 완전 자동발송 선택(B), 보안: 전용계정+환경변수 |
+| 2026-06-07 | 발송 시각 07:00→06:00 KST 변경 (cron 0 21 UTC) | 원격 routine | 사용자 요청 |
+| 2026-06-07 | 원격 routine 프롬프트를 AI타임스 3건 전용으로 임시 간소화(자동화 검증·속도 확인용). 검증 후 5개 소스 전체본으로 복구 예정 | 원격 routine | 실행 시간 단축·end-to-end 검증 |
+| 2026-06-07 | 발송을 SMTP→Apps Script 웹훅(HTTPS)으로 전환(send_brief_webhook.py + apps_script_mailer.gs 번들). 환경변수 MAIL_WEBHOOK_URL/MAIL_WEBHOOK_SECRET/MAIL_TO | email-delivery(스킬+scripts+assets), mail-dispatcher, 원격 routine | 클라우드에서 SMTP 587 포트 차단 |
+| 2026-06-07 | 글로벌 AI 뉴스 매체 6곳(Reuters/AP·FT·WSJ·The Information·TechCrunch·Semafor) 메인 섹션 추가(엄선 5건, 선별/제외 기준 + 3단계 검증, 유료매체는 헤드라인 발견·무료 1차출처 확인). 기술소스(HF·GitHub·arXiv)는 각 2건으로 축소해 "기술 동향" 한 섹션 병합. 신규 global-news-collector 에이전트 + global-news-collection 스킬(references/outlets.md). 섹션 순서: 글로벌→AI타임스→기술동향→정책 | global-news-collector(신규), global-news-collection(신규), ainews-orchestrator, brief-composition | 사용자 요청: 글로벌 AI 동향 일일 요약, 글로벌 매체 중심 재편 |
+| 2026-06-07 | 일일/주간 리포트 웹 포털 추가(webapp/server.py, 표준 라이브러리만, 의존성 0). `_workspace/`의 수집 JSON을 읽어 대시보드·일일(/daily)·주간(/weekly ISO주 집계)·발송본(/brief)·API(/api/reports) 제공. 새 브리핑 자동 반영. 기본 포트 8765, http://localhost:8765 | webapp/(신규) | 사용자 요청: 리포트 관리·상시 열람 웹 UI |
+| 2026-06-08 | GitHub 공개 랜딩 페이지 배포 — gommilab/ainews 저장소 생성 + GitHub Pages 활성화. 랜딩(webapp/landing/index.html) + 최신 브리핑 정적 미리보기(preview/). 라이브 포털 버튼은 GCP Cloud Run 배포 후 연결 예정(index.html의 LIVE_PORTAL_URL 마커). 공개 URL: https://gommilab.github.io/ainews/ | webapp/landing/(신규), gommilab/ainews(외부 저장소) | 사용자 요청: GitHub 계정 ainews 랜딩 + GCP 배포(GCP는 다음 단계) |
+| 2026-06-08 | UI를 목록형(아코디언)으로 전환 — 콘텐츠를 제목·출처·게시일 한 줄로 최신순 나열, 제목 클릭 시 요약 펼침 + 원문 보기 링크 + 닫기 버튼, 섹션 필터 칩. 포털(server.py) 렌더링 전면 교체(PORT 환경변수 지원 추가) + 정적 빌더(webapp/build_static.py)로 GitHub Pages index.html 생성·배포. 정렬: 게시일 desc, 동일날짜는 섹션 우선순위 | webapp/server.py, webapp/build_static.py(신규), gommilab/ainews(랜딩 index 교체) | 사용자 요청: 심플 목록형 UI |
+| 2026-06-12 | **신규 서브 하네스 "AI 원천 동향 데일리(PDF)"** 추가 — aitimes.kr 역추적으로 상류 1차 원천을 직접 감시, 그날 핫이슈 1건을 선별·deep-research 심층분석해 A4 1~2p PDF 브리프 생성·웹포털 게시(하루 2회). 신규 에이전트 source-digest-collector(스캔·랭킹·선별·심층수집)·source-digest-analyst(심층분석·작성·PDF·게시), 신규 스킬 source-pdf-digest(sources.yaml·ranking-and-analysis.md·scan_sources.py·html_to_pdf.py·brief_template.html)·source-digest-orchestrator. 기존 global-news-collector·news-collector·policy-collector·webapp 재활용. webapp에 /digest·/pdf 라우트 추가 | agents/source-digest-*(신규), skills/source-pdf-digest(신규), skills/source-digest-orchestrator(신규), webapp/server.py, docs/source-digest-service-design.md | 사용자 요청: aitimes 원천을 한 템포 먼저 잡아 연구자·정책자용 심층 PDF |
+| 2026-06-12 | 시범실행(2026-06-12 am) 피드백 반영 — ① PDF 템플릿 폰트를 네트워크 의존(Google Fonts @import) 제거하고 로컬 NanumGothic/Noto 폴백으로 변경(오프라인 한글 렌더), ② 밀도 상향(9.3pt·행간1.42·여백13mm·섹션간격 축소)으로 7섹션이 안정적으로 A4 1~2p에 수렴(시범 초기 3p→2p). ③ 운영 메모: 서브에이전트 Bash는 네트워크·실행이 샌드박스 차단될 수 있어 scan_sources.py 실행과 PDF 변환이 막힐 수 있음 → collector는 WebFetch 폴백으로 스캔, html_to_pdf.py는 Bash+weasyprint 실행 권한이 있는 환경(메인 세션/예약 런타임)에서 수행해야 함 | skills/source-pdf-digest/assets/brief_template.html | 시범실행 결과 3p 초과·폰트 네트워크 의존·서브에이전트 권한 제약 발견 |
