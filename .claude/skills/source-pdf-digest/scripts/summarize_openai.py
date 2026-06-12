@@ -100,9 +100,12 @@ SYSTEM_PROMPT = (
     '  "topic_kind": "model|tech|research|policy|regulation|standard|investment|infra|chip|mixed 중 하나",\n'
     '  "perspective": "research|policy|both(주관점 명시) — 시사점의 무게중심",\n'
     '  "keywords": ["제목 아래 배지로 노출할 주요 키워드 5개 이내. 기업·모델명·핵심 고유명사 위주(예: Anthropic, Mythos5, Fable5, Opus4.8). dossier에 등장한 표기 그대로, 일반어·관점명 금지"],\n'
+    '  "stat_cards": [{"num": "핵심 수치 한 덩어리(예: 80.3%, $10/$50, <5%, 2×, 78.0%)", "label": "그 수치가 무엇인지 짧게(예: SWE-bench Pro 코딩, 입력/출력 100만 토큰 가격)"}],  // 그날 이슈를 한눈에 보여줄 KPI 3~4개. dossier에 있는 수치만. 비교·성능·가격·규모·점유율 등. 수치 이슈가 없으면 빈 배열\n'
+    '  "chart": {"title": "비교 차트 제목(예: SWE-bench Pro — 에이전트 코딩 정확도)", "unit": "단위·각주(예: % · 높을수록 우수)", "series": [{"name": "항목명(모델/대상)", "value": 80.3, "highlight": true}]},  // 한 벤치마크/지표에서 대상들을 비교. 2~5개 항목, value는 숫자(단위 제외). 이번 이슈의 주인공 항목 하나에 highlight:true. 비교 수치가 없는 이슈(정책·투자 등)면 series를 빈 배열로\n'
     '  "keynote": ["핵심 요지 3~4개. 각 1~2문장. 무슨 일·왜 중요한지 + 가장 중요한 수치 1개를 포함해 바쁜 독자가 이것만 봐도 되게"],\n'
     '  "overview": "개요 — 무슨 일이 일어났고 왜 중요한지를 한 문단(3~5문장)으로. 도입부 성격. 세부 수치는 주요내용에 넘긴다.",\n'
     '  "main_content_html": "주요내용 — 이 섹션이 브리프의 깊이를 좌우한다. 연구자 수준으로 촘촘하게: dossier의 key_details에 있는 **수치·벤치마크·경쟁모델 비교값을 가능한 한 모두** 담고, 핵심 메커니즘·아키텍처·사양·가격·접근정책을 구체적으로 서술한다. 모델명·수치·고유명사는 원문 그대로 인용. 분량은 충분히 길게(최소 4~6개 문장 단락 + 핵심 수치 불릿 4개 이상). 순수 HTML 조각: <p>…</p> 여러 개와 <ul class=\\"tight\\"><li>…</li></ul>, 강조는 <b>.",\n'
+    '  "image_caption": "대표 이미지 설명 한 줄(무엇을 보여주는 이미지인지 + 출처사). dossier 이미지가 무엇인지 모르면 \'출처: {primary_source}\'로",\n'
     '  "implications": "시사점 — topic_kind에 맞는 관점(모델/기술/논문→연구·개발, 규제/표준/투자→정책, 경계→둘 다)으로 분석한다. \'중요하다/새로운 기준이다\' 같은 일반론은 금지하고, **무엇이 구체적으로 어떻게 바뀌는지**(연구 방향·재현성·벤치마크 신뢰성, 또는 규제·표준·산업·안보)를 dossier 근거로 짚는다. 이어 **한계·미해결 쟁점**(예: 자체 벤치마크 검증, 비공개 수치)과 **향후 관전 포인트**를 명시한다. 충분히 길게(4~6문장 이상). 순수 텍스트(필요 시 <b>만).",\n'
     "}\n"
     "분량 가이드: 전체가 A4 1~2페이지를 채우는 깊이로 쓴다(빈약하면 실패). 주요내용을 가장 두껍게, 개요는 압축적으로, 시사점은 분석적으로. 피상적 요약·동어반복을 피하고 dossier의 디테일을 최대한 활용한다."
@@ -157,6 +160,39 @@ def call_openai(api_key, model, messages):
         die(f"예상치 못한 응답 형식: {json.dumps(data)[:400]}", 4)
 
 
+def normalize_chart(chart):
+    """차트 series의 pct(막대 폭 %)를 최댓값=100 기준으로 결정적으로 계산(LLM 산술 미신뢰)."""
+    if not isinstance(chart, dict):
+        return None
+    series = [s for s in (chart.get("series") or []) if isinstance(s, dict)]
+    vals = []
+    for s in series:
+        try:
+            vals.append(float(s.get("value")))
+        except (TypeError, ValueError):
+            vals.append(None)
+    nums = [v for v in vals if v is not None]
+    if len(nums) < 2:  # 비교 대상이 2개 미만이면 차트 의미 없음
+        return None
+    mx = max(nums) or 1.0
+    out = []
+    for s, v in zip(series, vals):
+        if v is None:
+            continue
+        out.append({
+            "name": str(s.get("name") or ""),
+            "value": s.get("value"),
+            "pct": round(max(2.0, v / mx * 100.0), 1),  # 최소 2%는 보여 막대가 사라지지 않게
+            "highlight": bool(s.get("highlight")),
+        })
+    if not any(s["highlight"] for s in out):  # 강조 미지정 시 최댓값 항목 강조
+        top = max(range(len(out)), key=lambda i: float(out[i]["value"] or 0))
+        out[top]["highlight"] = True
+    return {"title": str(chart.get("title") or ""),
+            "unit": str(chart.get("unit") or ""),
+            "series": out[:5]}
+
+
 def assemble_sources(dossier):
     """출처 목록을 dossier에서 정확히 구성(LLM 미경유)."""
     out = []
@@ -206,6 +242,10 @@ def main():
         "topic_kind": gen.get("topic_kind") or dossier.get("topic_kind"),
         "perspective": gen.get("perspective") or "research",
         "keywords": (gen.get("keywords") or [])[:5],
+        "stat_cards": [s for s in (gen.get("stat_cards") or [])
+                       if isinstance(s, dict) and s.get("num")][:4],
+        "chart": normalize_chart(gen.get("chart")),
+        "image_caption": (gen.get("image_caption") or "").strip(),
         "keynote": gen.get("keynote") or [],
         "overview": gen.get("overview") or "",
         "main_content_html": gen.get("main_content_html") or "",

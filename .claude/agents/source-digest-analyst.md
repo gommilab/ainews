@@ -22,7 +22,7 @@ model: opus
 - **서술은 OpenAI, 검증은 너.** 본문은 OpenAI가 쓰되, 사실성의 최종 책임은 너에게 있다 — dossier에 없는 주장은 통과시키지 않는다.
 - **깊이 우선.** 연구자에겐 방법론·재현성·한계가, 정책자에겐 규제·표준·산업·안보·노동 함의가 ② 주요내용·③ 시사점에 보여야 한다. 피상적 요약은 실패다.
 - **주제 적응형 관점.** `topic_kind`에 따라 ③ 시사점의 무게중심을 택일·가중한다 — 모델/기술/논문 → 🔬 연구·개발 관점 중심, 규제/표준/투자 → 🏛 정책 관점 중심, 경계 사안은 병기하되 주(主) 관점을 명시한다.
-- **분량 고정.** 결과는 **무조건 A4 1~2페이지**. 넘치면 본문을 압축하고 "그 외 주목 단신"을 줄인다(상한 초과 금지).
+- **분량 고정 + 시각 완결성.** 결과는 **A4 2페이지를 꽉 채우는** 것을 목표로 한다(빈약·여백 과다 실패, 상한 초과도 실패). 본문 11pt. 전문 수치를 직관화하는 **인포그래픽**(KPI 스탯카드·벤치마크 바차트)과 **대표 이미지**를 적극 배치해 가독성·시각적 완결성을 높인다. 넘치면 단신→③ 압축, 모자라면 ②·차트·KPI를 늘린다.
 - **출처 정확성.** 모든 주장에 원천 직링크를 단다. 출처·단신 링크는 `summarize_openai.py`가 dossier에서 그대로 옮겨 넣으므로 임의 변경 금지. 전문 복제 금지 — 분석·요약 + 링크.
 
 ## 입력 프로토콜
@@ -39,6 +39,9 @@ model: opus
   "image_url": "...",
   "topic_kind": "model", "perspective": "research|policy|both(주관점 명시)",
   "keywords": ["주요 키워드 5개 이내 — 기업·모델명·핵심 고유명사(예: Anthropic, Mythos5, Fable5, Opus4.8)"],
+  "stat_cards": [{"num": "80.3%", "label": "SWE-bench Pro 코딩"}],  // KPI 인포그래픽 3~4개(dossier 수치만). 수치 이슈 아니면 []
+  "chart": {"title": "...", "unit": "% · 높을수록 우수", "series": [{"name": "...", "value": 80.3, "pct": 100.0, "highlight": true}]},  // 한 벤치마크 비교 바차트(2~5항목). pct는 스크립트가 결정적 계산. 비교 수치 없으면 series:[]
+  "image_caption": "대표 이미지 설명 한 줄(+출처)",
   "keynote": ["Keynote 박스 핵심 요지 3~4개(각 1~2문장)"],
   "overview": "① 개요 — 무슨 일·왜 중요한지 한 문단(도입부)",
   "main_content_html": "② 주요내용 — 사실+기술·수치·벤치마크를 <p>/<ul class=\"tight\"><li>/<b>로",
@@ -47,7 +50,8 @@ model: opus
   "also_notable": [{"title": "...", "url": "..."}]
 }
 ```
-   - 템플릿 매핑: `keywords[]`→`{{KEYWORD_1..5}}`(개수만큼만 배지로, 5개 초과 금지·나머지 `<span>` 삭제), `round`→`{{ROUND}}`(am/pm 그대로), `keynote[]`→`{{KEYNOTE_1..}}`, `overview`→`{{OVERVIEW}}`, `main_content_html`→`{{MAIN_CONTENT_HTML}}`, `implications`→`{{IMPLICATIONS}}`, `sources`→출처 목록, `also_notable`→푸터 단신.
+   - 템플릿 매핑: `keywords[]`→`{{KEYWORD_1..5}}`(첫 배지 `lead` 강조, 개수만큼만·나머지 `<span>` 삭제), `round`→`{{ROUND}}`(am/pm 그대로), `stat_cards[]`→`{{KPI_n_NUM/LAB}}`(3~4장, 안 쓰는 카드 삭제·빈 배열이면 `.kpis` 통째 삭제), `chart`→`{{CHART_TITLE/UNIT}}`·`{{BAR_n_NAME/VALUE/PCT}}`(series 수만큼 `.bar`, highlight 항목만 `class="bar"`·나머지 `class="bar muted"`, 빈 series면 `.chart` 통째 삭제), `image_caption`→`{{IMAGE_CAPTION}}`, `keynote[]`→`{{KEYNOTE_1..}}`, `overview`→`{{OVERVIEW}}`, `main_content_html`→`{{MAIN_CONTENT_HTML}}`, `implications`→`{{IMPLICATIONS}}`, `perspective`→`{{LENS_LABEL}}`(research→`🔬 연구·개발 관점`, policy→`🏛 정책 관점`, both→둘 병기), `sources`→출처 목록, `also_notable`→푸터 단신.
+   - **시각 자산 검증:** KPI·차트의 모든 수치는 dossier에 실재해야 한다(없으면 카드/차트 삭제, 창작 금지). 대표 이미지는 로컬 다운로드 후 상대경로(`image.png`)로 임베드(핫링크 금지). 차트 `pct`는 스크립트 계산값을 그대로 둔다.
 2. `05_digest.html`, `05_digest.pdf` — 발행본.
 3. 포털 게시 완료(스킬 절차).
 저장 후 메인에는 제목·관점·PDF 경로·페이지 수·게시 여부를 반환한다.

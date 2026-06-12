@@ -1,79 +1,157 @@
 <!doctype html>
 <!--
-  PDF 분석 브리프 템플릿 — source-pdf-digest / source-digest-analyst가 채운다.
+  PDF 분석 브리프 템플릿 v2 (시각 강화) — source-pdf-digest / source-digest-analyst가 채운다.
   사용법: 이 파일을 {workdir}/05_digest.html로 복사한 뒤 {{...}} 자리와 주석 블록을
-  04_analysis.json 내용으로 치환한다. 불필요한 섹션은 비우지 말고 통째로 삭제한다.
-  대표 이미지는 로컬 파일을 다운로드해 상대경로(예: img.jpg)로 임베드한다(핫링크 금지).
-  분량은 무조건 A4 1~2페이지. 넘치면 '그 외 주목 단신' → ③ 시사점 → ① 개요 순으로 줄인다(② 주요내용 깊이 유지).
+  04_analysis.json 내용으로 치환한다. 불필요한 슬롯(쓰지 않는 KPI·bar·badge·figure)은
+  비우지 말고 통째로 삭제한다. 대표 이미지는 로컬 파일로 내려받아 상대경로로 임베드한다(핫링크 금지).
+
+  설계 의도(2026-06-13 시각 개편):
+  - 본문 11pt. 인포그래픽(KPI 스탯카드·벤치마크 바차트)·대표 이미지로 기술 수치를 직관화.
+  - 목표 분량은 'A4 2페이지 꽉 채움'. 빈약하면 ② 주요내용·차트·KPI를 늘리고, 넘치면 §아래 캘리브레이션.
+  - 레이아웃 primitive는 display:table(셀 분할)로 통일 → 모든 WeasyPrint 버전에서 안정 렌더.
+  - 한글/임팩트 폰트: 'Pretendard'가 있으면 우선, 없으면 번들 'NanumGothicExtraBold'(8 weight)로 폴백.
 -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
 <title>{{HEADLINE_KO}} — AI Outlook</title>
 <style>
-  /* 한글 폰트는 로컬 우선(네트워크 의존 제거). 시스템에 Noto Sans KR이 있으면 그것을,
-     없으면 NanumGothic으로 폴백 → WeasyPrint가 오프라인에서도 한글을 정상 렌더한다. */
-  /* 밀도: 핫이슈 1건 본문(Keynote+개요·주요내용·시사점+출처)이 A4 1~2p에 들어가도록 검증된 값(2026-06-12 시범실행 기준).
-     가독성을 위해 줄간을 1.55로 넓혔다. 분량이 넘치면 본문 압축보다 먼저 이 값을 9pt/1.45까지 조여도 된다. */
-  @page { size: A4; margin: 13mm; }
+  /* ── 폰트: 네트워크 의존 없음. 본문=NanumGothic, 임팩트/숫자=Pretendard→NanumGothicExtraBold 폴백 ── */
+  @page { size: A4; margin: 9mm 11mm 8mm; }
   * { box-sizing: border-box; }
-  body { font-family: 'Noto Sans KR', 'NanumGothic', 'Nanum Gothic', 'Malgun Gothic', sans-serif;
-         color: #14213d; font-size: 9.3pt; line-height: 1.55; margin: 0; }
-  p { margin: 0 0 6px; }
-  .masthead { border-bottom: 2.5px solid #14213d; padding-bottom: 6px; margin-bottom: 10px;
-              display: flex; justify-content: space-between; align-items: baseline; }
-  .masthead .brand { font-weight: 900; font-size: 13pt; letter-spacing: -0.3px; white-space: nowrap; }
-  .masthead .meta { font-size: 8.5pt; color: #6b7280; }
-  h1 { font-size: 15pt; font-weight: 900; line-height: 1.2; margin: 3px 0 5px; }
-  .badges { margin: 0 0 8px; font-size: 8.5pt; }
-  .badge { display: inline-block; background: #14213d; color: #fff; border-radius: 4px;
-           padding: 2px 8px; margin-right: 5px; font-weight: 700; }
-  .badge.lens { background: #1d4ed8; }
-  .badge.kind { background: #6b7280; }
-  .tldr { background: #f1f5f9; border-left: 4px solid #1d4ed8; border-radius: 0 6px 6px 0;
-          padding: 7px 11px; margin: 0 0 8px; font-size: 9pt; }
-  .tldr b { font-size: 9pt; color: #1d4ed8; letter-spacing: 0.5px; }
-  .tldr ul { margin: 5px 0 0; padding-left: 18px; }
-  section { margin: 0 0 7px; }
-  section > h2 { font-size: 11pt; font-weight: 700; color: #14213d;
-                 border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin: 0 0 4px; }
-  .figure { float: right; width: 200px; margin: 0 0 8px 12px; }
-  .figure img { width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; }
-  .figure .cap { font-size: 7.5pt; color: #94a3b8; margin-top: 2px; }
-  ul.tight { margin: 4px 0; padding-left: 18px; }
-  ul.tight li { margin-bottom: 3px; }
-  .impl { display: grid; grid-template-columns: 1fr; gap: 6px; }
-  .impl .lens-block { background: #fafafa; border: 1px solid #eceff3; border-radius: 6px; padding: 8px 10px; }
-  .impl .lens-block h3 { margin: 0 0 3px; font-size: 9.5pt; }
-  .sources { font-size: 8.5pt; }
-  .sources a { color: #1d4ed8; text-decoration: none; word-break: break-all; }
+  :root {}
+  body { font-family: 'Pretendard', 'Noto Sans KR', 'NanumGothic', 'Malgun Gothic', sans-serif;
+         color: #1e2a44; font-size: 11pt; line-height: 1.44; margin: 0; -weasy-hyphens: none; }
+  p { margin: 0 0 5px; }
+  b, strong { font-weight: 700; }
+  .heavy { font-family: 'Pretendard', 'NanumGothicExtraBold', 'Noto Sans KR', sans-serif;
+           font-weight: 800; letter-spacing: -0.4px; }
+
+  /* ── 마스트헤드 ── */
+  .masthead { display: table; width: 100%; border-bottom: 3px solid #14213d;
+              padding-bottom: 7px; margin-bottom: 9px; }
+  .masthead .l { display: table-cell; vertical-align: bottom; }
+  .masthead .r { display: table-cell; vertical-align: bottom; text-align: right; white-space: nowrap; }
+  .brand { font-family: 'Pretendard', 'NanumGothicExtraBold', sans-serif; font-weight: 800;
+           font-size: 23pt; letter-spacing: -1px; line-height: 0.95; color: #14213d; }
+  .brand .ai { color: #1d4ed8; }
+  .brand .sat { font-size: 17pt; }
+  .tagline { font-size: 8pt; color: #64748b; margin-top: 3px; letter-spacing: 0.2px; }
+  .masthead .meta { font-size: 8.5pt; color: #475569; }
+  .masthead .meta .d { font-weight: 700; color: #14213d; }
+  .masthead .meta .round { display: inline-block; background: #1d4ed8; color: #fff;
+                           font-weight: 700; border-radius: 3px; padding: 0 6px; margin-left: 4px; }
+
+  /* ── 헤드라인 + 키워드 ── */
+  h1 { font-size: 17pt; font-weight: 800; line-height: 1.22; letter-spacing: -0.5px;
+       margin: 2px 0 7px; color: #14213d; }
+  .badges { margin: 0 0 9px; }
+  .badge { display: inline-block; background: #eef3fb; color: #1d4ed8; border: 1px solid #d6e2f7;
+           border-radius: 20px; padding: 1px 10px; margin: 0 5px 4px 0; font-size: 8.3pt; font-weight: 700; }
+  .badge.lead { background: #14213d; color: #fff; border-color: #14213d; }
+
+  /* ── KPI 스탯카드(인포그래픽) ── */
+  .kpis { display: table; width: 100%; border-spacing: 7px 0; margin: 0 0 9px; table-layout: fixed; }
+  .kpi { display: table-cell; background: #f7f9fc; border: 1px solid #e6ecf5; border-top: 3px solid #1d4ed8;
+         border-radius: 8px; padding: 8px 10px 9px; vertical-align: top; }
+  .kpi .num { font-family: 'Pretendard', 'NanumGothicExtraBold', sans-serif; font-weight: 800;
+              font-size: 17pt; line-height: 1; color: #14213d; letter-spacing: -0.6px; }
+  .kpi .lab { font-size: 8pt; color: #64748b; margin-top: 4px; line-height: 1.3; }
+
+  /* ── Keynote 콜아웃 ── */
+  .keynote { background: #f1f5fb; border: 1px solid #dce6f5; border-left: 4px solid #1d4ed8;
+             border-radius: 0 8px 8px 0; padding: 8px 13px 9px; margin: 0 0 9px; }
+  .keynote .kh { font-family: 'Pretendard', 'NanumGothicExtraBold', sans-serif; font-weight: 800;
+                 font-size: 8.6pt; color: #1d4ed8; letter-spacing: 1px; text-transform: uppercase; }
+  .keynote ul { margin: 5px 0 0; padding-left: 17px; }
+  .keynote li { margin-bottom: 3px; }
+
+  /* ── 섹션 ── */
+  section { margin: 0 0 6px; }
+  section > h2 { font-family: 'Pretendard', 'NanumGothicExtraBold', sans-serif; font-weight: 800;
+                 font-size: 12.5pt; color: #14213d; margin: 0 0 5px; padding-bottom: 3px;
+                 border-bottom: 2px solid #14213d; letter-spacing: -0.3px; }
+  section > h2 .en { color: #1d4ed8; }
+  ul.tight { margin: 5px 0; padding-left: 18px; }
+  ul.tight li { margin-bottom: 4px; }
+
+  /* ── 대표 이미지(본문 우측 플로팅) ── */
+  .figure { float: right; width: 210px; margin: 2px 0 8px 12px; }
+  .figure img { width: 100%; border: 1px solid #e2e8f0; border-radius: 7px; display: block; }
+  .figure .cap { font-size: 7.6pt; color: #94a3b8; margin-top: 3px; line-height: 1.35; }
+
+  /* ── 벤치마크 바차트(인포그래픽) ── */
+  .chart { background: #fff; border: 1px solid #e6ecf5; border-radius: 9px; padding: 9px 13px 10px;
+           margin: 6px 0 8px; }
+  .chart .ct { font-family: 'Pretendard', 'NanumGothicExtraBold', sans-serif; font-weight: 800;
+               font-size: 9.6pt; color: #14213d; margin-bottom: 1px; }
+  .chart .cu { font-size: 7.8pt; color: #94a3b8; margin-bottom: 7px; }
+  .bar { margin: 5px 0; }
+  .bar .lab { display: table; width: 100%; margin-bottom: 2px; }
+  .bar .lab .nm { display: table-cell; font-size: 8.5pt; font-weight: 700; color: #334155; }
+  .bar .lab .vl { display: table-cell; text-align: right; font-family: 'Pretendard','NanumGothicExtraBold',sans-serif;
+                  font-weight: 800; font-size: 8.7pt; color: #1d4ed8; }
+  .bar .track { background: #eef2f7; border-radius: 5px; height: 11px; overflow: hidden; }
+  .bar .fill { height: 11px; background: #1d4ed8; border-radius: 5px; }
+  .bar.muted .lab .vl { color: #64748b; }
+  .bar.muted .fill { background: #b3c0d4; }
+
+  /* ── 시사점 박스 ── */
+  .implbox { background: #f8fafc; border: 1px solid #e6ecf5; border-radius: 9px; padding: 10px 13px; }
+  .implbox .lens { display: inline-block; background: #14213d; color: #fff; font-size: 7.8pt;
+                   font-weight: 700; border-radius: 4px; padding: 1px 8px; margin-bottom: 6px; }
+
+  /* ── 출처 / 단신 ── */
+  .sources { font-size: 8.7pt; }
+  .sources ul { margin: 5px 0 0; padding-left: 17px; }
   .sources li { margin-bottom: 2px; }
-  .also { border-top: 1px dashed #cbd5e1; margin-top: 12px; padding-top: 7px; font-size: 8.5pt; color: #475569; }
+  .sources a { color: #1d4ed8; text-decoration: none; word-break: break-all; }
+  .also { border-top: 1px dashed #cbd5e1; margin-top: 7px; padding-top: 7px; font-size: 8.6pt; color: #475569; }
   .also b { color: #14213d; }
-  footer { border-top: 2px solid #14213d; margin-top: 12px; padding-top: 6px;
+  .also ul { margin: 5px 0 0; padding-left: 17px; }
+  .also li { margin-bottom: 2px; }
+  .also a { color: #1d4ed8; text-decoration: none; }
+
+  /* ── 푸터 ── */
+  footer { border-top: 2px solid #14213d; margin-top: 5px; padding-top: 5px;
            font-size: 8pt; color: #94a3b8; text-align: right; white-space: nowrap; }
-  footer .sig { font-weight: 800; color: #14213d; letter-spacing: -0.2px; }
+  footer .sig { font-family: 'Pretendard', 'NanumGothicExtraBold', sans-serif; font-weight: 800;
+                color: #14213d; letter-spacing: -0.3px; }
 </style>
 </head>
 <body>
 
   <div class="masthead">
-    <span class="brand">📡 AI Outlook</span>
-    <span class="meta">{{DATE}} · {{ROUND}} · 오늘의 핵심 이슈</span>
+    <div class="l">
+      <div class="brand"><span class="sat">📡</span> <span class="ai">AI</span> Outlook</div>
+      <div class="tagline">AI 원천 동향 심층 브리프 · 연구자·정책자용</div>
+    </div>
+    <div class="r">
+      <div class="meta"><span class="d">{{DATE}}</span><span class="round">{{ROUND}}</span></div>
+      <div class="meta" style="margin-top:3px">오늘의 핵심 이슈</div>
+    </div>
   </div>
 
   <h1>{{HEADLINE_KO}}</h1>
   <div class="badges">
-    <!-- 주요 키워드 5개 이내 (예: Anthropic · Mythos5 · Fable5 · Opus4.8). 개수만큼만 남기고 나머지 <span>은 삭제 -->
-    <span class="badge">{{KEYWORD_1}}</span>
+    <!-- 주요 키워드 5개 이내. 첫 배지에 class="badge lead"로 강조 가능. 안 쓰는 슬롯은 삭제 -->
+    <span class="badge lead">{{KEYWORD_1}}</span>
     <span class="badge">{{KEYWORD_2}}</span>
     <span class="badge">{{KEYWORD_3}}</span>
     <span class="badge">{{KEYWORD_4}}</span>
     <span class="badge">{{KEYWORD_5}}</span>
   </div>
 
-  <div class="tldr">
-    <b>Keynote</b>
+  <!-- KPI 스탯카드: 그날 이슈의 핵심 수치 3~4개. stat_cards[]에서 채운다. 3개면 셋째까지만 두고 넷째 삭제 -->
+  <div class="kpis">
+    <div class="kpi"><div class="num">{{KPI_1_NUM}}</div><div class="lab">{{KPI_1_LAB}}</div></div>
+    <div class="kpi"><div class="num">{{KPI_2_NUM}}</div><div class="lab">{{KPI_2_LAB}}</div></div>
+    <div class="kpi"><div class="num">{{KPI_3_NUM}}</div><div class="lab">{{KPI_3_LAB}}</div></div>
+    <div class="kpi"><div class="num">{{KPI_4_NUM}}</div><div class="lab">{{KPI_4_LAB}}</div></div>
+  </div>
+
+  <div class="keynote">
+    <div class="kh">KEYNOTE</div>
     <ul>
       <!-- keynote 각 줄을 <li>로 (3~4개) -->
       <li>{{KEYNOTE_1}}</li>
@@ -82,20 +160,43 @@
     </ul>
   </div>
 
-  <section><h2>① 개요</h2><p>{{OVERVIEW}}</p></section>
+  <section><h2>① 개요 <span class="en">Overview</span></h2><p>{{OVERVIEW}}</p></section>
 
-  <section><h2>② 주요내용</h2>
-    <!-- 대표 이미지가 있으면 본문 우측에 플로팅(제목과 충돌 방지) -->
+  <!-- 벤치마크/비교 바차트: chart.series[]에서 채운다. 대표 모델 행에 class="bar"(강조), 나머지 class="bar muted".
+       fill의 width는 chart 값의 정규화 백분율(최댓값=100%)이며 04_analysis.json의 series[].pct를 그대로 쓴다.
+       비교 수치가 없는 이슈(정책·투자 등)면 이 .chart 블록 전체를 삭제한다. -->
+  <div class="chart">
+    <div class="ct">{{CHART_TITLE}}</div>
+    <div class="cu">{{CHART_UNIT}}</div>
+    <div class="bar"><div class="lab"><span class="nm">{{BAR_1_NAME}}</span><span class="vl">{{BAR_1_VALUE}}</span></div>
+      <div class="track"><div class="fill" style="width:{{BAR_1_PCT}}%"></div></div></div>
+    <div class="bar muted"><div class="lab"><span class="nm">{{BAR_2_NAME}}</span><span class="vl">{{BAR_2_VALUE}}</span></div>
+      <div class="track"><div class="fill" style="width:{{BAR_2_PCT}}%"></div></div></div>
+    <div class="bar muted"><div class="lab"><span class="nm">{{BAR_3_NAME}}</span><span class="vl">{{BAR_3_VALUE}}</span></div>
+      <div class="track"><div class="fill" style="width:{{BAR_3_PCT}}%"></div></div></div>
+    <div class="bar muted"><div class="lab"><span class="nm">{{BAR_4_NAME}}</span><span class="vl">{{BAR_4_VALUE}}</span></div>
+      <div class="track"><div class="fill" style="width:{{BAR_4_PCT}}%"></div></div></div>
+    <div class="bar muted"><div class="lab"><span class="nm">{{BAR_5_NAME}}</span><span class="vl">{{BAR_5_VALUE}}</span></div>
+      <div class="track"><div class="fill" style="width:{{BAR_5_PCT}}%"></div></div></div>
+  </div>
+
+  <section><h2>② 주요내용 <span class="en">Deep Dive</span></h2>
+    <!-- 대표 이미지가 있으면 본문 우측에 플로팅(제목과 충돌 방지). 없으면 .figure 통째 삭제 -->
     <div class="figure">
       <img src="{{IMAGE_LOCAL}}" alt="">
-      <div class="cap">출처: {{PRIMARY_SOURCE}}</div>
+      <div class="cap">{{IMAGE_CAPTION}}</div>
     </div>
     {{MAIN_CONTENT_HTML}}</section>
 
-  <section><h2>③ 시사점</h2><p>{{IMPLICATIONS}}</p></section>
+  <section><h2>③ 시사점 <span class="en">Implications</span></h2>
+    <div class="implbox">
+      <span class="lens">{{LENS_LABEL}}</span>
+      <p style="margin-bottom:0">{{IMPLICATIONS}}</p>
+    </div>
+  </section>
 
-  <section class="sources"><h2>④ 출처 · 더 읽을거리</h2>
-    <ul class="tight">
+  <section class="sources"><h2>④ 출처 · 더 읽을거리 <span class="en">Sources</span></h2>
+    <ul>
       <li><a href="{{SRC_URL}}">{{SRC_TITLE}}</a> — {{SRC_NOTE}}</li>
       <!-- 관련 원천 반복 -->
     </ul>
@@ -103,8 +204,8 @@
 
   <div class="also">
     <b>그 외 주목 단신</b>
-    <ul class="tight">
-      <li><a href="{{ALSO_URL}}" style="color:#1d4ed8">{{ALSO_TITLE}}</a></li>
+    <ul>
+      <li><a href="{{ALSO_URL}}">{{ALSO_TITLE}}</a></li>
       <!-- 2~3건 -->
     </ul>
   </div>
