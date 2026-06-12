@@ -76,15 +76,15 @@
     </ul>
   </div>
 
-  <!-- 대표 이미지가 있으면 -->
-  <div class="figure">
-    <img src="{{IMAGE_LOCAL}}" alt="">
-    <div class="cap">출처: {{PRIMARY_SOURCE}}</div>
-  </div>
-
   <section><h2>① 개요</h2><p>{{OVERVIEW}}</p></section>
 
-  <section><h2>② 주요내용</h2>{{MAIN_CONTENT_HTML}}</section>
+  <section><h2>② 주요내용</h2>
+    <!-- 대표 이미지가 있으면 본문 우측에 플로팅(제목과 충돌 방지) -->
+    <div class="figure">
+      <img src="{{IMAGE_LOCAL}}" alt="">
+      <div class="cap">출처: {{PRIMARY_SOURCE}}</div>
+    </div>
+    {{MAIN_CONTENT_HTML}}</section>
 
   <section><h2>③ 시사점</h2><p>{{IMPLICATIONS}}</p></section>
 
