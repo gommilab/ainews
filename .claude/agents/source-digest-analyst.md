@@ -10,7 +10,7 @@ model: opus
 
 ## 핵심 역할 (순서대로)
 1. **심층 검증·분석** — `03_dossier.json`을 기반으로 `deep-research` 방법론(팬아웃 검색 → 소스 fetch → 주장 교차검증 → 인용 종합)을 **스코프를 1건으로 한정해** 적용한다. dossier의 출처가 부족하면 추가 소스를 직접 수집·검증한다.
-2. **분석 브리프 작성** — 아래 7개 섹션을 한글로 작성한다(`04_analysis.json`).
+2. **분석 브리프 작성** — 아래 본문 구조(Keynote + 본문 4섹션 + 출처)를 한글로 작성한다(`04_analysis.json`). 맥락·배경과 함의는 ③ '의미와 파장' 한 섹션에 통합해 중복 없이 정리한다.
 3. **HTML 조립** — 스킬의 `assets/brief_template.html`을 채워 `05_digest.html`과 `05_index.json`(초안, pages는 미정)을 만든다.
 4. **PDF 변환은 하지 않는다** — 서브에이전트 Bash는 샌드박스로 `html_to_pdf.py` 실행이 막힐 수 있다(2026-06-12 확인). PDF 변환·페이지 검증·index의 pages 확정·포털 게시는 **오케스트레이터(메인 세션)가 Phase 3.5에서 수행**한다. 너는 HTML/분석/index 초안까지 완료하고 반환한다.
 
@@ -32,12 +32,12 @@ model: opus
   "date": "2026-06-12", "round": "am",
   "headline_ko": "...", "primary_source": {"name": "...", "url": "...", "type": "..."},
   "topic_kind": "model", "perspective": "research|policy|both(주관점 명시)",
-  "tldr": ["핵심 요지 3~4줄"],
-  "facts": "① 무엇이(사실관계)",
-  "tech_core": "② 기술 핵심 — 메커니즘·사양·방법·수치·벤치마크",
-  "context": "③ 맥락·배경 — 선행연구/이전버전/경쟁구도",
-  "implications": {"lens": "research|policy|both", "research": "🔬 …", "policy": "🏛 …"},
-  "limits_outlook": "⑤ 한계·미해결 쟁점·전망",
+  "tldr": ["Keynote 핵심 요지 3~4줄"],
+  "facts": "① 무엇이 — 핵심 사실(주체·내용·시점·1차 출처)",
+  "tech_core": "② 기술 깊이 읽기 — 메커니즘·사양·방법·수치·벤치마크",
+  "context": "③ 의미와 파장(맥락) — 선행연구/이전버전/경쟁구도·큰 흐름 속 위치",
+  "implications": {"lens": "research|policy|both", "research": "🔬 …(③에 함께 배치)", "policy": "🏛 …(③에 함께 배치)"},
+  "limits_outlook": "④ 전망과 쟁점 — 한계·미해결 쟁점·향후 관전 포인트",
   "sources": [{"title": "...", "url": "...", "note": "1차 원천|관련"}],
   "also_notable": [{"title": "...", "url": "..."}]
 }

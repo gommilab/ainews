@@ -53,7 +53,7 @@ aitimes.kr이 한글화하기 전의 **상류 1차 원천**을 직접 감시 →
 ## Phase 3.5: PDF 변환 + 페이지 검증 (오케스트레이터 본문 = 메인 세션)
 **이 단계는 서브에이전트가 아니라 오케스트레이터(메인 세션)가 직접 Bash로 수행한다.** 메인 세션은 실행 권한이 있어 로컬 WeasyPrint 변환이 가능하다.
 1. `python3 .claude/skills/source-pdf-digest/scripts/html_to_pdf.py {workdir}/05_digest.html {workdir}/05_digest.pdf` 실행.
-2. 페이지 수 확인: `python3 -c "import fitz; print(fitz.open('{workdir}/05_digest.pdf').page_count)"` (PyMuPDF). **1~2p 초과 시** `05_digest.html`의 본문 밀도를 더 조이거나(폰트 9pt·행간 1.38) ③ 맥락·푸터 단신을 줄여 재변환. ②·④의 깊이는 유지.
+2. 페이지 수 확인: `python3 -c "import fitz; print(fitz.open('{workdir}/05_digest.pdf').page_count)"` (PyMuPDF). **1~2p 초과 시** `05_digest.html`의 본문 밀도를 더 조이거나(폰트 9pt·행간 1.38) ③ 의미와 파장의 맥락 단락·푸터 단신을 줄여 재변환. ② 기술 깊이 읽기와 ③ 함의의 깊이는 유지.
 3. `05_index.json`의 `pages`를 실제 페이지 수로 갱신.
 4. PDF 엔진이 모두 부재하면(폴백 체인 실패) HTML을 게시본으로 두고 보고에 명시.
 - 환경 준비: 변환에는 `weasyprint`(+로컬 한글 폰트 NanumGothic/Noto)와 `pymupdf`(페이지 검증·미리보기 래스터)가 필요하다. 없으면 `pip install --user --break-system-packages weasyprint pymupdf`.
