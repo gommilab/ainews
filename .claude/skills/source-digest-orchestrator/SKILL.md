@@ -19,8 +19,8 @@ aitimes.kr이 한글화하기 전의 **상류 1차 원천**을 직접 감시 →
 1. KST 기준 오늘 `{date}`, 회차 `{round}` 결정. 예약: 아침 06:00→`am`, 저녁 18:00→`pm`. 수동 호출이면 현재 시각으로 추정하거나 사용자 지정을 따른다.
 2. `_workspace/{date}/digest-{round}/` 존재 여부로 실행 모드 판별:
    - 없음 → **초기 실행**(Phase 1~4 전체)
-   - 있음 + "관점 바꿔/더 깊게/단신 보강/특정 섹션" → **부분 재실행**(analyst만, `03_dossier.json` 재사용)
-   - 있음 + "1위 말고 N위로/선별 다시" → collector 재선정(`02_selection.json` 후보 활용) → analyst 재작성
+   - 있음 + "관점 바꿔/더 깊게/단신 보강/특정 섹션" → **부분 재실행**(`summarize_openai.py` 재실행으로 `04_analysis.json` 재생성 → analyst 검증·재조립, `03_dossier.json` 재사용)
+   - 있음 + "1위 말고 N위로/선별 다시" → collector 재선정(`02_selection.json` 후보 활용) → OpenAI 재서술 → analyst 재조립
    - 있음 + "처음부터 다시" → 폴더를 `digest-{round}_prev/`로 이동 후 초기 실행
 3. 폴더 생성.
 
@@ -45,36 +45,47 @@ aitimes.kr이 한글화하기 전의 **상류 1차 원천**을 직접 감시 →
 - 프롬프트: `workdir`의 모든 `01_scan_*.json`을 읽어 랭킹 루브릭으로 **1위 1건 선정** → `02_selection.json`, 선정 1건 **심층 수집** → `03_dossier.json`. 2~3위·그 외 단신도 기록.
 - 핫이슈가 명확히 없으면 추적 이슈 1건 선정(사유 명시).
 
-## Phase 3: 심층 분석 + HTML 작성 (순차, source-digest-analyst)
-- `source-digest-analyst` 호출.
-- 프롬프트: `03_dossier.json` 기반 **deep-research 방법론 적용** 심층 분석 → `04_analysis.json` → `assets/brief_template.html`로 `05_digest.html` 조립 → `05_index.json`(초안, pages는 미정/0) 작성.
-- **analyst는 PDF 변환을 수행하지 않는다.** 서브에이전트 Bash는 네트워크·실행이 샌드박스 차단될 수 있어 `html_to_pdf.py`가 막힌다(2026-06-12 시범실행 확인). analyst는 HTML/분석/index까지만 완료하고 반환한다.
+## Phase 3: OpenAI 본문 서술 (오케스트레이터 본문 = 메인 세션)
+**본문 서술(개요·주요내용·시사점)은 OpenAI(ChatGPT)가 한다.** 네트워크·키가 필요해 메인 세션에서 직접 실행한다.
+1. `python3 .claude/skills/source-pdf-digest/scripts/summarize_openai.py {workdir}` 실행 → `03_dossier.json`을 근거로 `04_analysis.json` 생성.
+   - 모델: env `OPENAI_MODEL`(기본 `gpt-4o`). 키: env `OPENAI_API_KEY`(필수).
+2. **종료코드 분기:**
+   - `0` → 성공, Phase 4로.
+   - `3`(키 부재) 또는 `4`(API/JSON 실패) → **Claude 폴백**: Phase 4에서 analyst에게 "`04_analysis.json`을 직접 작성(스키마는 스킬 D단계)"하도록 지시.
+3. 키 주입: 로컬은 세션 env, 클라우드 예약은 루틴 env에 `OPENAI_API_KEY`(필요 시 `OPENAI_MODEL`)를 설정한다. **키를 코드/로그/커밋에 남기지 않는다.**
 
-## Phase 3.5: PDF 변환 + 페이지 검증 (오케스트레이터 본문 = 메인 세션)
+## Phase 4: 검증 + HTML 조립 (순차, source-digest-analyst)
+- `source-digest-analyst` 호출.
+- 프롬프트: (a) `04_analysis.json`이 있으면 그 본문의 수치·주장이 `03_dossier.json`에 근거하는지 **대조·교정**(환각·과장 제거), 없으면 dossier 근거로 **직접 작성**(폴백). (b) `assets/brief_template.html`로 `05_digest.html` 조립(Keynote 박스 + 개요·주요내용·시사점 + 출처 + 푸터). (c) `05_index.json`(초안, pages는 미정/0) 작성.
+- **analyst는 PDF 변환을 수행하지 않는다.** 서브에이전트 Bash는 네트워크·실행이 샌드박스 차단될 수 있다(2026-06-12 확인). analyst는 검증·HTML·index까지만 완료하고 반환한다.
+
+## Phase 5: PDF 변환 + 페이지 검증 (오케스트레이터 본문 = 메인 세션)
 **이 단계는 서브에이전트가 아니라 오케스트레이터(메인 세션)가 직접 Bash로 수행한다.** 메인 세션은 실행 권한이 있어 로컬 WeasyPrint 변환이 가능하다.
 1. `python3 .claude/skills/source-pdf-digest/scripts/html_to_pdf.py {workdir}/05_digest.html {workdir}/05_digest.pdf` 실행.
-2. 페이지 수 확인: `python3 -c "import fitz; print(fitz.open('{workdir}/05_digest.pdf').page_count)"` (PyMuPDF). **1~2p 초과 시** `05_digest.html`의 본문 밀도를 더 조이거나(폰트 9pt·행간 1.38) ③ 의미와 파장의 맥락 단락·푸터 단신을 줄여 재변환. ② 기술 깊이 읽기와 ③ 함의의 깊이는 유지.
+2. 페이지 수 확인: `python3 -c "import fitz; print(fitz.open('{workdir}/05_digest.pdf').page_count)"` (PyMuPDF). **1~2p 초과 시** `05_digest.html`의 본문 밀도를 더 조이거나(폰트 9pt·행간 1.38) ③ 시사점·푸터 단신을 줄여 재변환. ② 주요내용의 깊이는 유지.
 3. `05_index.json`의 `pages`를 실제 페이지 수로 갱신.
 4. PDF 엔진이 모두 부재하면(폴백 체인 실패) HTML을 게시본으로 두고 보고에 명시.
 - 환경 준비: 변환에는 `weasyprint`(+로컬 한글 폰트 NanumGothic/Noto)와 `pymupdf`(페이지 검증·미리보기 래스터)가 필요하다. 없으면 `pip install --user --break-system-packages weasyprint pymupdf`.
 
-## Phase 4: 검토 게이트 + 보고
+## Phase 6: 검토 게이트 + 보고
 - `05_digest.pdf` 또는 (변환 실패 시) `05_digest.html` 존재 확인.
 - 사용자에게 보고: 선정 1건 제목·원천·관점, 페이지 수, 포털 URL(`/digest`·`/pdf/{date}/{round}`), 2~3위 후보, 실패·누락(피드 오류, PDF 엔진 부재 등).
 
 ## 데이터 흐름
-파일 기반(`_workspace/{date}/digest-{round}/`): `01_scan_*.json`(스캔) → `02_selection.json`(선별) → `03_dossier.json`(심층수집) → `04_analysis.json`(분석) → `05_digest.html/.pdf`+`05_index.json`(발행·게시). 신규 검출 상태는 `_workspace/.source_digest_state.json`. 중간 파일 보존.
+파일 기반(`_workspace/{date}/digest-{round}/`): `01_scan_*.json`(스캔) → `02_selection.json`(선별) → `03_dossier.json`(심층수집) → `04_analysis.json`(OpenAI 본문 서술) → `05_digest.html/.pdf`+`05_index.json`(검증·발행·게시). 신규 검출 상태는 `_workspace/.source_digest_state.json`. 중간 파일 보존.
 
 ## 에러 핸들링
 - 수집가/피드 실패: 1회 재시도 → 재실패 시 해당 소스 제외 진행, 보고에 누락 명시(전체 중단 금지).
 - 신규 항목 없음: 추적 이슈 1건으로 진행.
-- 상충 수치: analyst가 1차 출처 우선·불확실은 한계 섹션 명시(삭제 금지).
+- **OpenAI 키 부재/호출 실패**(summarize_openai.py exit 3/4): analyst가 dossier 근거로 `04_analysis.json` 직접 작성(Claude 폴백). 보고에 "OpenAI 폴백" 명시.
+- 상충 수치: analyst가 1차 출처 우선·불확실은 ③ 시사점에 명시(삭제 금지).
 - PDF 엔진 부재: HTML 보존 + 변환 실패 보고(스킬 폴백 체인 시도 후).
 - 2p 초과: 압축 재조립.
 
 ## 테스트 시나리오
-- **정상 흐름**: 6스캔 → collector가 corporate에서 "신규 프런티어 모델 출시"를 1위 선정·심층수집 → analyst가 🔬연구 관점 2p PDF 생성 → 포털 게시 → 보고.
+- **정상 흐름**: 6스캔 → collector가 corporate에서 "신규 프런티어 모델 출시"를 1위 선정·심층수집 → OpenAI(gpt-4o)가 개요·주요내용·시사점 서술 → analyst가 사실성 검증·🔬연구 관점 확인·HTML 조립 → 메인 세션이 2p PDF 변환 → 포털 게시 → 보고.
 - **에러(신규 부재)**: 한산한 날 → 추적 이슈 1건 선정 → 1p 브리프 → "신규 부재—추적 이슈" 명시.
 - **에러(스캔 일부 실패)**: github 스캔 실패 → 나머지로 랭킹 진행 → 보고에 "GitHub 스캔 실패" 명시.
+- **에러(OpenAI 키 부재)**: `OPENAI_API_KEY` 미설정 → summarize_openai.py exit 3 → analyst가 직접 작성(폴백) → "OpenAI 폴백—Claude 작성" 보고.
 - **에러(PDF 엔진 부재)**: WeasyPrint/대체 모두 없음 → `05_digest.html` 보존 + "PDF 변환 실패, HTML 게시" 보고.
-- **후속(관점 변경)**: "정책 관점으로 다시" → analyst만 재호출, `03_dossier.json` 재사용 → PDF 재생성.
+- **후속(관점 변경)**: "정책 관점으로 다시" → summarize_openai.py 재실행(관점 힌트 조정) → analyst 재검증·재조립, `03_dossier.json` 재사용 → PDF 재생성.

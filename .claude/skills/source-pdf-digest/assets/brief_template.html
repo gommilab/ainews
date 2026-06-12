@@ -4,7 +4,7 @@
   사용법: 이 파일을 {workdir}/05_digest.html로 복사한 뒤 {{...}} 자리와 주석 블록을
   04_analysis.json 내용으로 치환한다. 불필요한 섹션은 비우지 말고 통째로 삭제한다.
   대표 이미지는 로컬 파일을 다운로드해 상대경로(예: img.jpg)로 임베드한다(핫링크 금지).
-  분량은 무조건 A4 1~2페이지. 넘치면 '그 외 주목 단신' → ③ 의미와 파장 → ④ 전망과 쟁점 순으로 줄인다.
+  분량은 무조건 A4 1~2페이지. 넘치면 '그 외 주목 단신' → ③ 시사점 → ① 개요 순으로 줄인다(② 주요내용 깊이 유지).
 -->
 <html lang="ko">
 <head>
@@ -13,7 +13,7 @@
 <style>
   /* 한글 폰트는 로컬 우선(네트워크 의존 제거). 시스템에 Noto Sans KR이 있으면 그것을,
      없으면 NanumGothic으로 폴백 → WeasyPrint가 오프라인에서도 한글을 정상 렌더한다. */
-  /* 밀도: 핫이슈 1건 본문(Keynote+4섹션+출처)이 A4 1~2p에 들어가도록 검증된 값(2026-06-12 시범실행 기준).
+  /* 밀도: 핫이슈 1건 본문(Keynote+개요·주요내용·시사점+출처)이 A4 1~2p에 들어가도록 검증된 값(2026-06-12 시범실행 기준).
      분량이 넘치면 본문 압축보다 먼저 이 값을 9pt/1.38까지 더 조여도 된다. */
   @page { size: A4; margin: 13mm; }
   * { box-sizing: border-box; }
@@ -69,10 +69,10 @@
   <div class="tldr">
     <b>Keynote</b>
     <ul>
-      <!-- tldr 각 줄을 <li>로 -->
-      <li>{{TLDR_1}}</li>
-      <li>{{TLDR_2}}</li>
-      <li>{{TLDR_3}}</li>
+      <!-- keynote 각 줄을 <li>로 (3~4개) -->
+      <li>{{KEYNOTE_1}}</li>
+      <li>{{KEYNOTE_2}}</li>
+      <li>{{KEYNOTE_3}}</li>
     </ul>
   </div>
 
@@ -82,22 +82,13 @@
     <div class="cap">출처: {{PRIMARY_SOURCE}}</div>
   </div>
 
-  <section><h2>① 무엇이 — 핵심 사실</h2><p>{{FACTS}}</p></section>
+  <section><h2>① 개요</h2><p>{{OVERVIEW}}</p></section>
 
-  <section><h2>② 기술 깊이 읽기</h2>{{TECH_CORE_HTML}}</section>
+  <section><h2>② 주요내용</h2>{{MAIN_CONTENT_HTML}}</section>
 
-  <section><h2>③ 의미와 파장</h2>
-    <p>{{CONTEXT}}</p>
-    <div class="impl">
-      <!-- 주제에 따라 연구/정책 중 주 관점을 먼저, 보조 관점은 있으면 -->
-      <div class="lens-block"><h3>🔬 연구·개발 관점</h3><p>{{IMPL_RESEARCH}}</p></div>
-      <div class="lens-block"><h3>🏛 정책 관점</h3><p>{{IMPL_POLICY}}</p></div>
-    </div>
-  </section>
+  <section><h2>③ 시사점</h2><p>{{IMPLICATIONS}}</p></section>
 
-  <section><h2>④ 전망과 쟁점</h2><p>{{LIMITS_OUTLOOK}}</p></section>
-
-  <section class="sources"><h2>⑤ 출처 · 더 읽을거리</h2>
+  <section class="sources"><h2>④ 출처 · 더 읽을거리</h2>
     <ul class="tight">
       <li><a href="{{SRC_URL}}">{{SRC_TITLE}}</a> — {{SRC_NOTE}}</li>
       <!-- 관련 원천 반복 -->
