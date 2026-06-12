@@ -22,7 +22,7 @@
   p { margin: 0 0 6px; }
   .masthead { border-bottom: 2.5px solid #14213d; padding-bottom: 6px; margin-bottom: 10px;
               display: flex; justify-content: space-between; align-items: baseline; }
-  .masthead .brand { font-weight: 900; font-size: 13pt; letter-spacing: -0.3px; }
+  .masthead .brand { font-weight: 900; font-size: 13pt; letter-spacing: -0.3px; white-space: nowrap; }
   .masthead .meta { font-size: 8.5pt; color: #6b7280; }
   h1 { font-size: 15pt; font-weight: 900; line-height: 1.2; margin: 3px 0 5px; }
   .badges { margin: 0 0 8px; font-size: 8.5pt; }
@@ -51,7 +51,8 @@
   .also { border-top: 1px dashed #cbd5e1; margin-top: 12px; padding-top: 7px; font-size: 8.5pt; color: #475569; }
   .also b { color: #14213d; }
   footer { border-top: 2px solid #14213d; margin-top: 12px; padding-top: 6px;
-           font-size: 7.5pt; color: #94a3b8; display: flex; justify-content: space-between; }
+           font-size: 8pt; color: #94a3b8; text-align: right; white-space: nowrap; }
+  footer .sig { font-weight: 800; color: #14213d; letter-spacing: -0.2px; }
 </style>
 </head>
 <body>
@@ -109,7 +110,7 @@
   </div>
 
   <footer>
-    <span>AI Outlook @gommilab, {{DATE}} {{ROUND}}</span>
+    <span class="sig">AI Outlook</span> @gommilab
   </footer>
 
 </body>
