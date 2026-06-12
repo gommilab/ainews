@@ -9,16 +9,17 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>{{HEADLINE_KO}} — AI 원천 동향 데일리</title>
+<title>{{HEADLINE_KO}} — AI Outlook</title>
 <style>
   /* 한글 폰트는 로컬 우선(네트워크 의존 제거). 시스템에 Noto Sans KR이 있으면 그것을,
      없으면 NanumGothic으로 폴백 → WeasyPrint가 오프라인에서도 한글을 정상 렌더한다. */
   /* 밀도: 핫이슈 1건 본문(Keynote+개요·주요내용·시사점+출처)이 A4 1~2p에 들어가도록 검증된 값(2026-06-12 시범실행 기준).
-     분량이 넘치면 본문 압축보다 먼저 이 값을 9pt/1.38까지 더 조여도 된다. */
+     가독성을 위해 줄간을 1.55로 넓혔다. 분량이 넘치면 본문 압축보다 먼저 이 값을 9pt/1.45까지 조여도 된다. */
   @page { size: A4; margin: 13mm; }
   * { box-sizing: border-box; }
   body { font-family: 'Noto Sans KR', 'NanumGothic', 'Nanum Gothic', 'Malgun Gothic', sans-serif;
-         color: #14213d; font-size: 9.3pt; line-height: 1.42; margin: 0; }
+         color: #14213d; font-size: 9.3pt; line-height: 1.55; margin: 0; }
+  p { margin: 0 0 6px; }
   .masthead { border-bottom: 2.5px solid #14213d; padding-bottom: 6px; margin-bottom: 10px;
               display: flex; justify-content: space-between; align-items: baseline; }
   .masthead .brand { font-weight: 900; font-size: 13pt; letter-spacing: -0.3px; }
@@ -40,6 +41,7 @@
   .figure img { width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; }
   .figure .cap { font-size: 7.5pt; color: #94a3b8; margin-top: 2px; }
   ul.tight { margin: 4px 0; padding-left: 18px; }
+  ul.tight li { margin-bottom: 3px; }
   .impl { display: grid; grid-template-columns: 1fr; gap: 6px; }
   .impl .lens-block { background: #fafafa; border: 1px solid #eceff3; border-radius: 6px; padding: 8px 10px; }
   .impl .lens-block h3 { margin: 0 0 3px; font-size: 9.5pt; }
@@ -55,15 +57,18 @@
 <body>
 
   <div class="masthead">
-    <span class="brand">📡 AI 원천 동향 데일리</span>
-    <span class="meta">{{DATE}} · {{ROUND_KO}} 회차 · 오늘의 핵심 이슈</span>
+    <span class="brand">📡 AI Outlook</span>
+    <span class="meta">{{DATE}} · {{ROUND}} · 오늘의 핵심 이슈</span>
   </div>
 
   <h1>{{HEADLINE_KO}}</h1>
   <div class="badges">
-    <span class="badge">{{PRIMARY_SOURCE}}</span>
-    <span class="badge kind">{{TOPIC_KIND}}</span>
-    <span class="badge lens">{{PERSPECTIVE_KO}} 관점</span>
+    <!-- 주요 키워드 5개 이내 (예: Anthropic · Mythos5 · Fable5 · Opus4.8). 개수만큼만 남기고 나머지 <span>은 삭제 -->
+    <span class="badge">{{KEYWORD_1}}</span>
+    <span class="badge">{{KEYWORD_2}}</span>
+    <span class="badge">{{KEYWORD_3}}</span>
+    <span class="badge">{{KEYWORD_4}}</span>
+    <span class="badge">{{KEYWORD_5}}</span>
   </div>
 
   <div class="tldr">
@@ -104,8 +109,7 @@
   </div>
 
   <footer>
-    <span>원천 직접 감시 · aitimes.kr 상류 1차 출처 기반 · 분석 자동 생성</span>
-    <span>harness-ainews-brief · {{DATE}} {{ROUND_KO}}</span>
+    <span>AI Outlook @gommilab, {{DATE}} {{ROUND}}</span>
   </footer>
 
 </body>

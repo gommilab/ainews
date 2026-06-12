@@ -99,6 +99,7 @@ SYSTEM_PROMPT = (
     '  "headline_ko": "한 줄 제목(dossier 제목을 다듬어도 됨)",\n'
     '  "topic_kind": "model|tech|research|policy|regulation|standard|investment|infra|chip|mixed 중 하나",\n'
     '  "perspective": "research|policy|both(주관점 명시) — 시사점의 무게중심",\n'
+    '  "keywords": ["제목 아래 배지로 노출할 주요 키워드 5개 이내. 기업·모델명·핵심 고유명사 위주(예: Anthropic, Mythos5, Fable5, Opus4.8). dossier에 등장한 표기 그대로, 일반어·관점명 금지"],\n'
     '  "keynote": ["핵심 요지 3~4개. 각 1~2문장. 무슨 일·왜 중요한지 + 가장 중요한 수치 1개를 포함해 바쁜 독자가 이것만 봐도 되게"],\n'
     '  "overview": "개요 — 무슨 일이 일어났고 왜 중요한지를 한 문단(3~5문장)으로. 도입부 성격. 세부 수치는 주요내용에 넘긴다.",\n'
     '  "main_content_html": "주요내용 — 이 섹션이 브리프의 깊이를 좌우한다. 연구자 수준으로 촘촘하게: dossier의 key_details에 있는 **수치·벤치마크·경쟁모델 비교값을 가능한 한 모두** 담고, 핵심 메커니즘·아키텍처·사양·가격·접근정책을 구체적으로 서술한다. 모델명·수치·고유명사는 원문 그대로 인용. 분량은 충분히 길게(최소 4~6개 문장 단락 + 핵심 수치 불릿 4개 이상). 순수 HTML 조각: <p>…</p> 여러 개와 <ul class=\\"tight\\"><li>…</li></ul>, 강조는 <b>.",\n'
@@ -204,6 +205,7 @@ def main():
         "image_url": dossier.get("image_url"),
         "topic_kind": gen.get("topic_kind") or dossier.get("topic_kind"),
         "perspective": gen.get("perspective") or "research",
+        "keywords": (gen.get("keywords") or [])[:5],
         "keynote": gen.get("keynote") or [],
         "overview": gen.get("overview") or "",
         "main_content_html": gen.get("main_content_html") or "",

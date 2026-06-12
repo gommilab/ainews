@@ -26,7 +26,7 @@ WORKSPACE = os.path.join(ROOT, "_workspace")
 REPORTS = os.path.join(ROOT, "reports")
 OUT_HTML = os.path.join(ROOT, "digest.html")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-ROUND_KO = {"am": "아침", "pm": "저녁"}
+ROUND_KO = {"am": "am", "pm": "pm"}
 
 
 def esc(s):
@@ -122,16 +122,20 @@ def render(items):
         cards = []
         for it in items:
             d, rnd = it.get("date"), it.get("round")
-            badges = (f'<span class="badge b-src">{esc(it.get("primary_source"))}</span>'
-                      f'<span class="badge b-kind">{esc(it.get("topic_kind"))}</span>'
-                      f'<span class="badge b-lens">{esc(it.get("perspective"))} 관점</span>')
+            kws = it.get("keywords") or []
+            if kws:
+                badges = "".join(f'<span class="badge b-src">{esc(k)}</span>' for k in kws[:5])
+            else:
+                badges = (f'<span class="badge b-src">{esc(it.get("primary_source"))}</span>'
+                          f'<span class="badge b-kind">{esc(it.get("topic_kind"))}</span>'
+                          f'<span class="badge b-lens">{esc(it.get("perspective"))} 관점</span>')
             if it.get("_has_pdf") and it.get("pdf"):
                 dl = (f'<a class="dl" href="{esc(it["pdf"])}" target="_blank">📄 PDF 다운로드 '
                       f'({esc(it.get("pages"))}p)</a>')
             else:
                 dl = '<span style="color:#ef4444;font-size:13px">PDF 준비 중</span>'
             cards.append(f"""<div class="card">
-<div class="meta">📡 {esc(d)} · {ROUND_KO.get(rnd, rnd)} 회차</div>
+<div class="meta">📡 {esc(d)} · {ROUND_KO.get(rnd, rnd)}</div>
 <div class="ttl">{esc(it.get("headline_ko"))}</div>
 <div>{badges}</div>
 {dl}
@@ -141,8 +145,8 @@ def render(items):
         body = '<div class="empty">아직 생성된 심층 브리프가 없습니다.</div>'
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI 원천 동향 데일리 — 심층 브리프</title><style>{CSS}</style></head><body>
-<header class="top"><span class="brand">📡 AI 원천 동향 데일리</span>
+<title>AI Outlook — 심층 브리프</title><style>{CSS}</style></head><body>
+<header class="top"><span class="brand">📡 AI Outlook</span>
 <a href="index.html">← 랜딩</a><a href="https://github.com/gommilab/ainews" target="_blank">GitHub</a></header>
 <main class="wrap">
 <h1>원천 심층 브리프</h1>

@@ -1,4 +1,4 @@
-# 원천 소스 레지스트리 — "AI 원천 동향 데일리(PDF)" 감시 대상의 단일 소스(SoT).
+# 원천 소스 레지스트리 — "AI Outlook(PDF)" 감시 대상의 단일 소스(SoT).
 # aitimes.kr이 한글화하기 전의 상류 1차 원천. scan_sources.py가 feed: rss 항목을 파싱한다.
 # feed: scrape 항목은 RSS가 없어 에이전트가 WebFetch로 url을 직접 확인한다.
 # 새 원천 추가/삭제는 이 파일만 고치면 된다.

@@ -4,6 +4,13 @@
   "headline_ko": "앤스로픽, Mythos급 프런티어 모델 Claude Fable 5·Mythos 5 공개 — SOTA 성능과 이중용도 안전장치 동시 구현",
   "topic_kind": "model",
   "perspective": "research — 연구자 관점에서 성능·안전성·접근성 변화에 주목",
+  "keywords": [
+    "Anthropic",
+    "Claude Fable 5",
+    "Claude Mythos 5",
+    "Opus 4.8",
+    "SWE-bench Pro"
+  ],
   "primary_source": "Anthropic",
   "pdf": "reports/2026-06-12/digest-am.pdf",
   "pages": 2,
