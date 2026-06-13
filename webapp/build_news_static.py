@@ -16,7 +16,7 @@ import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPORTS = os.path.join(ROOT, "reports")
-OUT_HTML = os.path.join(ROOT, "news.html")
+OUT_HTML = os.path.join(ROOT, "index.html")  # Top 20 뉴스를 사이트 랜딩으로 사용
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
@@ -85,8 +85,9 @@ def build():
 body{{margin:0;font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,'Malgun Gothic',sans-serif;
 background:#f4f6f9;color:#0f172a;line-height:1.55}}
 .top{{background:#14213d;color:#fff;padding:14px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}}
-.top .brand{{font-weight:800;letter-spacing:-.3px}}
+.top .brand{{font-weight:800;letter-spacing:-.3px;font-size:15px}}
 .top a{{color:#cbd5e1;text-decoration:none;font-size:14px}}.top a:hover{{color:#fff}}
+.top a.brand{{color:#fff}}
 .top .sp{{flex:1}}
 .wrap{{max-width:880px;margin:0 auto;padding:24px 18px 60px}}
 h1{{font-size:22px;margin:2px 0 4px;letter-spacing:-.4px}}
@@ -113,8 +114,8 @@ border-radius:5px;padding:1px 7px;margin-left:7px}}
 .empty{{background:#fff;border:1px dashed #cbd5e1;border-radius:12px;padding:44px;text-align:center;color:#64748b}}
 .foot{{margin-top:34px;color:#94a3b8;font-size:12px;text-align:center}}
 </style></head><body>
-<header class="top"><span class="brand">📰 AI Outlook</span>
-<a href="index.html">랜딩</a><a href="news.html">Top 20 뉴스</a><a href="digest.html">심층 브리프(PDF)</a>
+<header class="top"><a class="brand" href="./">📰 AI Outlook</a>
+<a href="./">Top 20 뉴스</a><a href="digest.html">심층 브리프(PDF)</a>
 <span class="sp"></span>
 <a href="https://github.com/gommilab/ainews" target="_blank">GitHub</a></header>
 <main class="wrap">
@@ -165,7 +166,7 @@ render('{latest}');
 
     with open(OUT_HTML, "w", encoding="utf-8") as f:
         f.write(page)
-    print(f"[ok] Top 20 포털 → {os.path.relpath(OUT_HTML, ROOT)} (날짜 {len(dates)}개, 최신 {latest or '-'})")
+    print(f"[ok] Top 20 랜딩 → {os.path.relpath(OUT_HTML, ROOT)} (날짜 {len(dates)}개, 최신 {latest or '-'})")
 
 
 if __name__ == "__main__":

@@ -30,7 +30,7 @@ def build_index():
 <meta name="description" content="글로벌 AI 동향 일일·주간 브리핑 — 최신순 목록">
 <style>{server.PAGE_CSS}</style></head><body>
 <header class="top"><a class="brand" href="./">🗞️ AI 뉴스 브리핑</a>
-<nav><a href="./">전체</a><a href="news.html">📰 Top 20 뉴스</a><a href="digest.html">📄 심층 브리프(PDF)</a><a href="{PREVIEW_HREF}">발송본</a></nav></header>
+<nav><a href="index.html">📰 Top 20 뉴스</a><a href="digest.html">📄 심층 브리프(PDF)</a><a href="{PREVIEW_HREF}">발송본</a></nav></header>
 <main class="wrap">{body_head}{list_html}</main>
 <div class="foot-note">harness-ainews-brief · 매일 06:00 KST 자동 수집 · 라이브 포털(GCP)은 추후 연결</div>
 <script>{server.LIST_JS}</script></body></html>"""
