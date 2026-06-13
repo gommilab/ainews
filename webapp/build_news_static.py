@@ -32,14 +32,13 @@ def render_items_html(items):
         to = (it.get("title_orig") or "").strip()
         show_orig = to and to != (it.get("title_ko") or "").strip()
         orig = f'<div class="orig">{esc(to)}</div>' if show_orig else ""
-        cat = f'<span class="cat">{esc(it.get("category"))}</span>' if it.get("category") else ""
         url = it.get("url") or ""
         title = esc(it.get("title_ko"))
         link = f'<a href="{esc(url)}" target="_blank" rel="noopener">{title}</a>' if url else title
         rows.append(
             f'<li{cls}><p class="ttl">{link}</p>{orig}'
             f'<div class="meta"><span class="src">{esc(it.get("source"))}</span>'
-            f'<span class="dot">·</span>{esc(it.get("published"))}{cat}</div></li>'
+            f'<span class="dot">·</span>{esc(it.get("published"))}</div></li>'
         )
     return "\n".join(rows)
 
@@ -96,7 +95,6 @@ h1{{font-size:22px;margin:2px 0 4px;letter-spacing:-.4px}}
 .bar{{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}}
 .bar label{{font-size:13px;color:#475569;font-weight:700}}
 select{{font-size:14px;padding:7px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:#0f172a}}
-.count{{font-size:13px;color:#94a3b8}}
 ol.list{{list-style:none;margin:0;padding:0;counter-reset:r}}
 ol.list li{{background:#fff;border:1px solid #e6e9ef;border-radius:11px;padding:13px 15px 13px 50px;
 margin-bottom:9px;position:relative}}
@@ -110,8 +108,6 @@ ol.list li.t1::before{{background:#1d4ed8}}
 .meta{{font-size:12.5px;color:#64748b;margin-top:6px}}
 .meta .src{{font-weight:700;color:#1d4ed8}}
 .meta .dot{{color:#cbd5e1;margin:0 6px}}
-.cat{{display:inline-block;font-size:11px;font-weight:700;background:#eef2f7;color:#475569;
-border-radius:5px;padding:1px 7px;margin-left:7px}}
 .empty{{background:#fff;border:1px dashed #cbd5e1;border-radius:12px;padding:44px;text-align:center;color:#64748b}}
 .foot{{margin-top:30px;padding-top:14px;border-top:1px solid #e6e9ef;color:#94a3b8;
 font-size:11.5px;line-height:1.55;text-align:center}}
@@ -120,7 +116,7 @@ font-size:11.5px;line-height:1.55;text-align:center}}
 <a href="./">Top 20 뉴스</a><a href="digest.html">Issue 리포트</a>
 <span class="sp"></span><span class="sig">@gommilab</span></header>
 <main class="wrap">
-<h1>AI 뉴스 Top 20</h1>
+<h1>Top 20 뉴스</h1>
 <div class="sub">매일 글로벌 정보채널로부터 AI 기술·정책 동향을 통합 수집하여 제공합니다.</div>
 """
 
@@ -130,7 +126,6 @@ font-size:11.5px;line-height:1.55;text-align:center}}
         page += f"""<div class="bar">
 <label for="d">날짜</label>
 <select id="d" onchange="render(this.value)">{options}</select>
-<span class="count" id="cnt">총 {len(data[latest].get("items", []))}건 · {esc(latest)}</span>
 </div>
 <ol class="list" id="list">
 {render_items_html(data[latest].get("items", []))}
@@ -141,20 +136,18 @@ function esc(s){{return String(s==null?'':s).replace(/[&<>\"]/g,function(c){{
 return {{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}}[c];}});}}
 function render(date){{
   var items = DATA[date] || [];
-  document.getElementById('cnt').textContent = '총 ' + items.length + '건 · ' + date;
   var h = '';
   for (var i=0;i<items.length;i++){{
     var it = items[i];
     var cls = it.rank===1 ? ' class="t1"' : '';
     var to = (it.title_orig||'').trim();
     var orig = (to && to !== (it.title_ko||'').trim()) ? '<div class="orig">'+esc(to)+'</div>' : '';
-    var cat = it.category ? '<span class="cat">'+esc(it.category)+'</span>' : '';
     var link = it.url
       ? '<a href="'+esc(it.url)+'" target="_blank" rel="noopener">'+esc(it.title_ko)+'</a>'
       : esc(it.title_ko);
     h += '<li'+cls+'><p class="ttl">'+link+'</p>'+orig
        + '<div class="meta"><span class="src">'+esc(it.source)+'</span>'
-       + '<span class="dot">·</span>'+esc(it.published)+cat+'</div></li>';
+       + '<span class="dot">·</span>'+esc(it.published)+'</div></li>';
   }}
   document.getElementById('list').innerHTML = h;
 }}
