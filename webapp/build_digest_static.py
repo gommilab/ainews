@@ -171,12 +171,12 @@ def render(items):
         body = '<div class="empty">아직 생성된 심층 브리프가 없습니다.</div>'
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Outlook — Deep Brief</title><style>{CSS}</style></head><body>
+<title>AI Outlook — Issue 리포트</title><style>{CSS}</style></head><body>
 <header class="top"><a class="brand" href="index.html">📄 AI Outlook</a>
-<a href="index.html">Top 20 뉴스</a><a href="digest.html">Deep Brief</a>
+<a href="index.html">Top 20 뉴스</a><a href="digest.html">Issue 리포트</a>
 <span class="sp"></span><span class="sig">@gommilab</span></header>
 <main class="wrap">
-<h1>Deep Brief</h1>
+<h1>Issue 리포트</h1>
 {body}
 <div class="foot">※ aitimes.kr 상류 1차 출처를 자동 수집·분석한 참고용 브리프로, 내용의 정확성·완전성을 보장하지 않으며 투자·정책 판단의 근거로 사용할 수 없습니다.<br>저작권은 각 원 출처에 있습니다.</div>
 </main></body></html>"""

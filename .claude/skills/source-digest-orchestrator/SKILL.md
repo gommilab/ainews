@@ -45,19 +45,19 @@ aitimes.kr이 한글화하기 전의 **상류 1차 원천**을 직접 감시 →
 - 프롬프트: `workdir`의 모든 `01_scan_*.json`을 읽어 랭킹 루브릭으로 **1위 1건 선정** → `02_selection.json`, 선정 1건 **심층 수집** → `03_dossier.json`. 2~3위·그 외 단신도 기록.
 - 핫이슈가 명확히 없으면 추적 이슈 1건 선정(사유 명시).
 
-## Phase 3: OpenAI 본문 서술 (오케스트레이터 본문 = 메인 세션)
-**본문 서술(개요·주요내용·시사점)은 OpenAI(ChatGPT)가 한다.** 네트워크·키가 필요해 메인 세션에서 직접 실행한다.
+## Phase 3: GPT-5.5 본문 초안 (오케스트레이터 본문 = 메인 세션)
+**본문 초안(개요·주요내용·시사점)은 GPT-5.5가 쓴다.** 네트워크·키가 필요해 메인 세션에서 직접 실행한다.
 1. `python3 .claude/skills/source-pdf-digest/scripts/summarize_openai.py {workdir}` 실행 → `03_dossier.json`을 근거로 `04_analysis.json` 생성.
-   - 모델: env `OPENAI_MODEL`(기본 `gpt-4o`). 키: env `OPENAI_API_KEY`(필수).
-2. **종료코드 분기:**
-   - `0` → 성공, Phase 4로.
-   - `3`(키 부재) 또는 `4`(API/JSON 실패) → **Claude 폴백**: Phase 4에서 analyst에게 "`04_analysis.json`을 직접 작성(스키마는 스킬 D단계)"하도록 지시.
-3. 키 주입: 로컬은 세션 env, 클라우드 예약은 루틴 env에 `OPENAI_API_KEY`(필요 시 `OPENAI_MODEL`)를 설정한다. **키를 코드/로그/커밋에 남기지 않는다.**
+   - 모델: env `OPENAI_MODEL`(기본 `gpt-5.5`). 키: env `OPENAI_API_KEY`(필수).
+2. **종료코드 분기:** `0` → Phase 4로. `3`(키 부재)/`4`(API·JSON 실패) → **Opus 4.8 폴백**: Phase 4에서 analyst가 `04_analysis.json`을 직접 작성(스키마는 스킬 D단계).
+3. 키 주입: 로컬은 세션 env(또는 `.claude/settings.local.json`), 클라우드 예약은 루틴 env에 `OPENAI_API_KEY`·`OPENAI_MODEL=gpt-5.5`. **키를 코드/로그/커밋에 남기지 않는다.**
 
-## Phase 4: 검증 + HTML 조립 (순차, source-digest-analyst)
-- `source-digest-analyst` 호출.
-- 프롬프트: (a) `04_analysis.json`이 있으면 그 본문의 수치·주장이 `03_dossier.json`에 근거하는지 **대조·교정**(환각·과장 제거), 없으면 dossier 근거로 **직접 작성**(폴백). (b) `assets/brief_template.html`로 `05_digest.html` 조립(Keynote 박스 + 개요·주요내용·시사점 + 출처 + 푸터). (c) `05_index.json`(초안, pages는 미정/0) 작성.
-- **analyst는 PDF 변환을 수행하지 않는다.** 서브에이전트 Bash는 네트워크·실행이 샌드박스 차단될 수 있다(2026-06-12 확인). analyst는 검증·HTML·index까지만 완료하고 반환한다.
+## Phase 4: 상호 교차검증 + HTML 조립 (source-digest-analyst ↔ GPT-5.5)
+**Opus 4.8과 GPT-5.5가 dossier 근거로 서로 검증해 정확성·신뢰성·가독성을 확보한다.**
+1. **1차 교차검증·교정(analyst = Opus 4.8):** `source-digest-analyst` 호출. `04_analysis.json`의 모든 수치·주장이 `03_dossier.json`에 근거하는지 **한 문장씩 대조·교정**(환각·과장·자체보고 단정 제거, 가독성 향상)하고 교정본으로 `04_analysis.json`을 덮어쓴다. (없으면 dossier 근거로 직접 작성=폴백.)
+2. **2차 교차검증(GPT-5.5):** 메인 세션에서 `python3 .claude/skills/source-pdf-digest/scripts/summarize_openai.py {workdir} --verify` 실행 → analyst 교정본을 dossier와 재대조해 `04_crosscheck_openai.json`(`overall_ok`·`issues`·`readability_notes`) 생성. 키 부재(exit 3)/실패(4)면 생략하고 보고에 명시.
+3. **반영·확정 + HTML 조립(analyst = Opus 4.8):** analyst가 `04_crosscheck_openai.json`의 지적을 dossier 근거로 검토해 타당한 high/medium을 반영(부당하면 기각), 최종 `04_analysis.json` 확정(`generator`=`"GPT-5.5 draft × Opus 4.8 verify"`). 이어 `assets/brief_template.html`로 `05_digest.html` 조립(Keynote + 개요·주요내용·시사점 + 출처 + 푸터) + `05_index.json`(초안, pages 미정/0).
+- **analyst는 PDF 변환을 수행하지 않는다.** 서브에이전트 Bash는 샌드박스 차단될 수 있다(2026-06-12 확인). analyst는 검증·HTML·index까지만 완료하고 반환한다. (2·3단계는 한 번의 analyst 호출 안에서 메인 세션이 --verify를 끼워 진행하거나, analyst가 1차까지 → 메인이 --verify → analyst 재호출로 확정하는 2콜 방식 중 택일.)
 
 ## Phase 5: PDF 변환 + 페이지 검증 (오케스트레이터 본문 = 메인 세션)
 **이 단계는 서브에이전트가 아니라 오케스트레이터(메인 세션)가 직접 Bash로 수행한다.** 메인 세션은 실행 권한이 있어 로컬 WeasyPrint 변환이 가능하다.
@@ -73,20 +73,20 @@ aitimes.kr이 한글화하기 전의 **상류 1차 원천**을 직접 감시 →
 - 사용자에게 보고: 선정 1건 제목·원천·관점, 페이지 수, 포털 URL(`/digest`·`/pdf/{date}/{round}`), 2~3위 후보, 실패·누락(피드 오류, PDF 엔진 부재 등).
 
 ## 데이터 흐름
-파일 기반(`_workspace/{date}/digest-{round}/`): `01_scan_*.json`(스캔) → `02_selection.json`(선별) → `03_dossier.json`(심층수집) → `04_analysis.json`(OpenAI 본문 서술) → `05_digest.html/.pdf`+`05_index.json`(검증·발행·게시). 신규 검출 상태는 `_workspace/.source_digest_state.json`. 중간 파일 보존.
+파일 기반(`_workspace/{date}/digest-{round}/`): `01_scan_*.json`(스캔) → `02_selection.json`(선별) → `03_dossier.json`(심층수집) → `04_analysis.json`(GPT-5.5 초안 → Opus 4.8 교정) → `04_crosscheck_openai.json`(GPT-5.5 2차 검증) → `05_digest.html/.pdf`+`05_index.json`(확정·발행·게시). 신규 검출 상태는 `_workspace/.source_digest_state.json`. 중간 파일 보존.
 
 ## 에러 핸들링
 - 수집가/피드 실패: 1회 재시도 → 재실패 시 해당 소스 제외 진행, 보고에 누락 명시(전체 중단 금지).
 - 신규 항목 없음: 추적 이슈 1건으로 진행.
-- **OpenAI 키 부재/호출 실패**(summarize_openai.py exit 3/4): analyst가 dossier 근거로 `04_analysis.json` 직접 작성(Claude 폴백). 보고에 "OpenAI 폴백" 명시.
+- **GPT-5.5 키 부재/호출 실패**(summarize_openai.py exit 3/4): Phase 3 초안은 analyst(Opus 4.8) 직접 작성으로 폴백, Phase 4 `--verify` 2차 검증은 생략. 보고에 "GPT-5.5 폴백—Opus 4.8 단독" 명시.
 - 상충 수치: analyst가 1차 출처 우선·불확실은 ③ 시사점에 명시(삭제 금지).
 - PDF 엔진 부재: HTML 보존 + 변환 실패 보고(스킬 폴백 체인 시도 후).
 - 2p 초과: 압축 재조립.
 
 ## 테스트 시나리오
-- **정상 흐름**: 6스캔 → collector가 corporate에서 "신규 프런티어 모델 출시"를 1위 선정·심층수집 → OpenAI(gpt-4o)가 개요·주요내용·시사점 서술 → analyst가 사실성 검증·🔬연구 관점 확인·HTML 조립 → 메인 세션이 2p PDF 변환 → 포털 게시 → 보고.
+- **정상 흐름**: 6스캔 → collector가 corporate에서 "신규 프런티어 모델 출시"를 1위 선정·심층수집 → GPT-5.5가 개요·주요내용·시사점 초안 → analyst(Opus 4.8)가 dossier 대조 1차 교정 → GPT-5.5 `--verify` 2차 검증 → analyst가 지적 반영·확정·HTML 조립 → 메인 세션이 2p PDF 변환 → 포털 게시 → 보고.
 - **에러(신규 부재)**: 한산한 날 → 추적 이슈 1건 선정 → 1p 브리프 → "신규 부재—추적 이슈" 명시.
 - **에러(스캔 일부 실패)**: github 스캔 실패 → 나머지로 랭킹 진행 → 보고에 "GitHub 스캔 실패" 명시.
-- **에러(OpenAI 키 부재)**: `OPENAI_API_KEY` 미설정 → summarize_openai.py exit 3 → analyst가 직접 작성(폴백) → "OpenAI 폴백—Claude 작성" 보고.
+- **에러(GPT-5.5 키 부재)**: `OPENAI_API_KEY` 미설정 → summarize_openai.py exit 3 → analyst(Opus 4.8)가 초안 직접 작성 + `--verify` 생략 → "GPT-5.5 폴백—Opus 4.8 단독" 보고.
 - **에러(PDF 엔진 부재)**: WeasyPrint/대체 모두 없음 → `05_digest.html` 보존 + "PDF 변환 실패, HTML 게시" 보고.
-- **후속(관점 변경)**: "정책 관점으로 다시" → summarize_openai.py 재실행(관점 힌트 조정) → analyst 재검증·재조립, `03_dossier.json` 재사용 → PDF 재생성.
+- **후속(관점 변경)**: "정책 관점으로 다시" → summarize_openai.py(GPT-5.5) 재실행 → 교차검증 재수행 → analyst 재확정·재조립, `03_dossier.json` 재사용 → PDF 재생성.

@@ -16,11 +16,15 @@
 파일 폴백을 둔다):
   1) 환경변수 OPENAI_API_KEY / OPENAI_MODEL
   2) `.claude/settings.local.json`의 `env` 블록 (gitignore됨 → 커밋 안 됨)
-키가 어디에도 없으면 exit 3 (Claude 폴백 신호). 모델 기본값 gpt-4o.
+키가 어디에도 없으면 exit 3 (Claude 폴백 신호). 모델 기본값 gpt-5.5.
   OPENAI_BASE_URL (선택, 기본 https://api.openai.com/v1)
 
-실행:  python3 summarize_openai.py {workdir}
-출력:  {workdir}/04_analysis.json
+실행:
+  python3 summarize_openai.py {workdir}            # 본문 서술(GPT-5.5 드래프트) → 04_analysis.json
+  python3 summarize_openai.py {workdir} --verify   # GPT-5.5 교차검증 → 04_crosscheck_openai.json
+교차검증: GPT-5.5가 작성한 04_analysis.json을 Claude(Opus 4.8) analyst가 dossier와
+대조해 교정하고, 그 교정본을 다시 이 --verify(GPT-5.5)가 사실성·가독성으로 재검증한다.
+analyst는 GPT-5.5 지적사항을 반영해 최종 04_analysis.json을 확정한다(상호 교차검증).
 """
 import json
 import os
@@ -64,7 +68,7 @@ def resolve_credentials():
             key = (env.get("OPENAI_API_KEY") or "").strip()
         if not model:
             model = (env.get("OPENAI_MODEL") or "").strip()
-    return key, (model or "gpt-4o")
+    return key, (model or "gpt-5.5")
 
 
 def die(msg, code):
@@ -115,6 +119,80 @@ SYSTEM_PROMPT = (
     "}\n"
     "분량 가이드: 전체가 A4 1~2페이지를 채우는 깊이로 쓴다(빈약하면 실패). 주요내용을 가장 두껍게, 개요는 압축적으로, 시사점은 분석적으로. 피상적 요약·동어반복을 피하고 dossier의 디테일을 최대한 활용한다."
 )
+
+
+VERIFY_SYSTEM_PROMPT = (
+    "당신은 과학기술 AI 동향 브리프의 엄정한 팩트체커이자 한글 에디터다. "
+    "Claude(Opus 4.8)가 교정한 분석본(analysis)을, 검증된 1차 출처 dossier와 한 문장씩 대조해 검증한다. "
+    "목표는 ① 정확성(모든 수치·고유명사·인과 주장이 dossier에 근거가 있는가), "
+    "② 신뢰성(자체보고 벤치마크를 단정하지 않는가·출처 불명 단정이 없는가·추정과 사실을 구분하는가), "
+    "③ 가독성(논리 흐름·문장 명료성·중복 제거)을 높은 수준으로 끌어올리는 것이다. "
+    "dossier에 근거가 없는 진술(환각), 수치 불일치, 과장·홍보 표현을 반드시 찾아낸다. "
+    "근거가 충분하면 통과시키고, 사소한 트집은 잡지 않는다. "
+    "JSON 하나만 출력한다(코드블록·설명 금지):\n"
+    "{\n"
+    '  "overall_ok": true,            // 중대한 사실오류가 없으면 true\n'
+    '  "confidence": 0.0,             // 검증 확신도 0~1\n'
+    '  "issues": [                    // 발견한 문제(없으면 빈 배열). 심각도 high=사실오류/환각, medium=출처·단정 문제, low=표현\n'
+    '    {"field": "overview|main_content_html|implications|keynote|stat_cards|chart|keywords|headline_ko|subhead",\n'
+    '     "severity": "high|medium|low",\n'
+    '     "problem": "무엇이 dossier와 어긋나는지/왜 문제인지 구체적으로",\n'
+    '     "suggested_fix": "어떻게 고쳐야 하는지(대체 문구 또는 삭제 제안)"}\n'
+    "  ],\n"
+    '  "readability_notes": ["가독성·흐름 개선 제안(있으면)"],\n'
+    '  "verdict_summary": "한두 문장 총평"\n'
+    "}\n"
+    "issues의 모든 지적은 dossier 근거에 입각해야 하며, 추측으로 새 사실을 만들지 마라."
+)
+
+
+def build_verify_payload(dossier, analysis):
+    """검증용 페이로드 — dossier 근거 + 검증 대상 analysis 본문 필드."""
+    return {
+        "dossier_evidence": {
+            "headline": dossier.get("headline_ko") or dossier.get("headline_orig"),
+            "primary_source": dossier.get("primary_source"),
+            "facts": dossier.get("facts"),
+            "key_details": dossier.get("key_details"),
+            "context_notes": dossier.get("context_notes"),
+        },
+        "analysis_to_verify": {
+            "headline_ko": analysis.get("headline_ko"),
+            "subhead": analysis.get("subhead"),
+            "keywords": analysis.get("keywords"),
+            "stat_cards": analysis.get("stat_cards"),
+            "chart": analysis.get("chart"),
+            "keynote": analysis.get("keynote"),
+            "overview": analysis.get("overview"),
+            "main_content_html": analysis.get("main_content_html"),
+            "implications": analysis.get("implications"),
+        },
+    }
+
+
+def verify_main(workdir, api_key, model):
+    """GPT-5.5 교차검증 — 04_analysis.json을 dossier와 대조해 04_crosscheck_openai.json 생성."""
+    dossier = load_json(os.path.join(workdir, "03_dossier.json"), required=True)
+    analysis = load_json(os.path.join(workdir, "04_analysis.json"), required=True)
+    messages = [
+        {"role": "system", "content": VERIFY_SYSTEM_PROMPT},
+        {"role": "user", "content":
+            "다음 dossier 근거로 analysis_to_verify를 검증하고 JSON으로 보고하라.\n\n"
+            + json.dumps(build_verify_payload(dossier, analysis), ensure_ascii=False)},
+    ]
+    raw = call_openai(api_key, model, messages)
+    try:
+        verdict = json.loads(raw)
+    except json.JSONDecodeError:
+        die(f"검증 LLM이 JSON이 아닌 응답 반환: {raw[:300]}", 4)
+    verdict["verifier"] = f"openai:{model}"
+    out_path = os.path.join(workdir, "04_crosscheck_openai.json")
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(verdict, f, ensure_ascii=False, indent=2)
+    issues = verdict.get("issues") or []
+    highs = sum(1 for i in issues if isinstance(i, dict) and i.get("severity") == "high")
+    print(f"[ok] GPT-5.5 교차검증 → {out_path} "
+          f"(overall_ok={verdict.get('overall_ok')}, issues {len(issues)}건·high {highs})")
 
 
 def build_user_payload(dossier, selection):
@@ -213,12 +291,18 @@ def assemble_sources(dossier):
 
 
 def main():
-    if len(sys.argv) < 2:
-        die("usage: summarize_openai.py {workdir}", 2)
-    workdir = sys.argv[1].rstrip("/")
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    flags = {a for a in sys.argv[1:] if a.startswith("--")}
+    if not args:
+        die("usage: summarize_openai.py {workdir} [--verify]", 2)
+    workdir = args[0].rstrip("/")
     api_key, model = resolve_credentials()
     if not api_key:
         die("OPENAI_API_KEY 미설정(env·settings.local.json 모두 없음) — Claude 폴백으로 전환하세요.", 3)
+
+    if "--verify" in flags:
+        verify_main(workdir, api_key, model)
+        return
 
     dossier = load_json(os.path.join(workdir, "03_dossier.json"), required=True)
     selection = load_json(os.path.join(workdir, "02_selection.json"), required=False)
