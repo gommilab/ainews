@@ -108,7 +108,10 @@ h1{font-size:21px;margin:4px 0}
 .card .meta{font-size:12px;color:#94a3b8;margin-bottom:5px}
 .card .rnd{display:inline-block;font-size:11px;font-weight:800;border-radius:5px;padding:1px 8px;
 margin-right:6px;background:#1d4ed8;color:#fff;letter-spacing:.3px}
-.card .ttl{font-size:16px;font-weight:700;line-height:1.4;margin-bottom:8px}
+.card .cardhd{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.card .ttl{font-size:16px;font-weight:700;line-height:1.4;margin:0}
+.card .cardhd .dl{margin-top:0;flex:none;white-space:nowrap;align-self:center}
+.pending{color:#ef4444;font-size:13px;flex:none;white-space:nowrap;align-self:center}
 .daygroup{margin-bottom:8px}
 .dayhd{font-size:13px;font-weight:800;color:#14213d;margin:18px 0 9px;padding-bottom:5px;
 border-bottom:2px solid #e6e9ef}
@@ -134,15 +137,17 @@ def render_card(it):
     sub = f'<div class="meta" style="margin:6px 0 0">{esc(it.get("subhead"))}</div>' \
         if it.get("subhead") else ""
     if it.get("_has_pdf") and it.get("pdf"):
-        dl = (f'<a class="dl" href="{esc(it["pdf"])}" target="_blank">📄 PDF 다운로드 '
+        dl = (f'<a class="dl" href="{esc(it["pdf"])}" target="_blank">📄 PDF 보기 '
               f'({esc(it.get("pages"))}p)</a>')
     else:
-        dl = '<span style="color:#ef4444;font-size:13px">PDF 준비 중</span>'
+        dl = '<span class="pending">PDF 준비 중</span>'
     return f"""<div class="card">
+<div class="cardhd">
 <div class="ttl"><span class="rnd">{esc(ROUND_KO.get(rnd, rnd)).upper()}</span>{esc(it.get("headline_ko"))}</div>
+{dl}
+</div>
 {sub}
 <div style="margin-top:8px">{badges}</div>
-{dl}
 </div>"""
 
 
@@ -169,8 +174,7 @@ def render(items):
 <span class="sp"></span>
 <a href="https://github.com/gommilab/ainews" target="_blank">GitHub</a></header>
 <main class="wrap">
-<h1>원천 심층 브리프 · PDF 아카이브</h1>
-<div class="sub">aitimes.kr 상류 1차 원천을 직접 감시 · 그날 핫이슈 1건 심층분석 · A4 1~2p PDF · 매일 am·pm 2회 · 카드의 PDF 다운로드 버튼으로 내려받기</div>
+<h1>심층 브리프(PDF)</h1>
 {body}
 <div class="foot">harness-ainews-brief · 매일 06:00·18:00 KST 자동 생성 · 과학기술 연구자·정책자용</div>
 </main></body></html>"""
