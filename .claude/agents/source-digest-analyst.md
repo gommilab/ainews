@@ -50,7 +50,7 @@ model: opus
   "also_notable": [{"title": "...", "url": "..."}]
 }
 ```
-   - 템플릿 매핑: `keywords[]`→`{{KEYWORD_1..5}}`(첫 배지 `lead` 강조, 개수만큼만·나머지 `<span>` 삭제), `round`→`{{ROUND}}`(am/pm 그대로), `stat_cards[]`→`{{KPI_n_NUM/LAB}}`(3~4장, 안 쓰는 카드 삭제·빈 배열이면 `.kpis` 통째 삭제), `chart`→`{{CHART_TITLE/UNIT}}`·`{{BAR_n_NAME/VALUE/PCT}}`(series 수만큼 `.bar`, highlight 항목만 `class="bar"`·나머지 `class="bar muted"`, 빈 series면 `.chart` 통째 삭제), `image_caption`→`{{IMAGE_CAPTION}}`, `keynote[]`→`{{KEYNOTE_1..}}`, `overview`→`{{OVERVIEW}}`, `main_content_html`→`{{MAIN_CONTENT_HTML}}`, `implications`→`{{IMPLICATIONS}}`, `perspective`→`{{LENS_LABEL}}`(research→`🔬 연구·개발 관점`, policy→`🏛 정책 관점`, both→둘 병기), `sources`→출처 목록, `also_notable`→푸터 단신.
+   - 템플릿 매핑: `keywords[]`→`{{KEYWORD_1..5}}`(첫 배지 `lead` 강조, 개수만큼만·나머지 `<span>` 삭제), `round`→`{{ROUND}}`(am/pm 그대로), `stat_cards[]`→`{{KPI_n_NUM/LAB}}`(3~4장, 안 쓰는 카드 삭제·빈 배열이면 `.kpis` 통째 삭제), `chart`→`{{CHART_TITLE/UNIT}}`·`{{BAR_n_NAME/VALUE/PCT}}`(series 수만큼 `.bar`, highlight 항목만 `class="bar"`·나머지 `class="bar muted"`, 빈 series면 `.chart` 통째 삭제), `image_caption`→`{{IMAGE_CAPTION}}`, `keynote[]`→`{{KEYNOTE_1..}}`, `overview`→`{{OVERVIEW}}`, `main_content_html`→`{{MAIN_CONTENT_HTML}}`, `implications`→`{{IMPLICATIONS}}`(관점 라벨·머리표지 없이 본문만), `sources`→출처 목록(`{{SRC_URL}}`·`{{SRC_TITLE}}`만, 한글 부연 없음), `also_notable`→푸터 단신(원천 제목만). `perspective`는 내부 관점 가중에만 쓰고 PDF에 라벨로 노출하지 않는다.
    - **시각 자산 검증:** KPI·차트의 모든 수치는 dossier에 실재해야 한다(없으면 카드/차트 삭제, 창작 금지). 대표 이미지는 로컬 다운로드 후 상대경로(`image.png`)로 임베드(핫링크 금지). 차트 `pct`는 스크립트 계산값을 그대로 둔다.
 2. `05_digest.html`, `05_digest.pdf` — 발행본.
 3. 포털 게시 완료(스킬 절차).

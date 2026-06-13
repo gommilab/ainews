@@ -33,10 +33,9 @@
   .masthead .l { display: table-cell; vertical-align: bottom; }
   .masthead .r { display: table-cell; vertical-align: bottom; text-align: right; white-space: nowrap; }
   .brand { font-family: 'Pretendard', 'NanumGothicExtraBold', sans-serif; font-weight: 800;
-           font-size: 23pt; letter-spacing: -1px; line-height: 0.95; color: #14213d; }
+           font-size: 30pt; letter-spacing: -1.6px; line-height: 0.92; color: #14213d;
+           text-transform: none; }
   .brand .ai { color: #1d4ed8; }
-  .brand .sat { font-size: 17pt; }
-  .tagline { font-size: 8pt; color: #64748b; margin-top: 3px; letter-spacing: 0.2px; }
   .masthead .meta { font-size: 8.5pt; color: #475569; }
   .masthead .meta .d { font-weight: 700; color: #14213d; }
   .masthead .meta .round { display: inline-block; background: #1d4ed8; color: #fff;
@@ -71,7 +70,6 @@
   section > h2 { font-family: 'Pretendard', 'NanumGothicExtraBold', sans-serif; font-weight: 800;
                  font-size: 12.5pt; color: #14213d; margin: 0 0 5px; padding-bottom: 3px;
                  border-bottom: 2px solid #14213d; letter-spacing: -0.3px; }
-  section > h2 .en { color: #1d4ed8; }
   ul.tight { margin: 5px 0; padding-left: 18px; }
   ul.tight li { margin-bottom: 4px; }
 
@@ -98,8 +96,6 @@
 
   /* ── 시사점 박스 ── */
   .implbox { background: #f8fafc; border: 1px solid #e6ecf5; border-radius: 9px; padding: 10px 13px; }
-  .implbox .lens { display: inline-block; background: #14213d; color: #fff; font-size: 7.8pt;
-                   font-weight: 700; border-radius: 4px; padding: 1px 8px; margin-bottom: 6px; }
 
   /* ── 출처 / 단신 ── */
   .sources { font-size: 8.7pt; }
@@ -123,12 +119,10 @@
 
   <div class="masthead">
     <div class="l">
-      <div class="brand"><span class="sat">📡</span> <span class="ai">AI</span> Outlook</div>
-      <div class="tagline">AI 원천 동향 심층 브리프 · 연구자·정책자용</div>
+      <div class="brand"><span class="ai">AI</span> Outlook</div>
     </div>
     <div class="r">
       <div class="meta"><span class="d">{{DATE}}</span><span class="round">{{ROUND}}</span></div>
-      <div class="meta" style="margin-top:3px">오늘의 핵심 이슈</div>
     </div>
   </div>
 
@@ -160,7 +154,7 @@
     </ul>
   </div>
 
-  <section><h2>① 개요 <span class="en">Overview</span></h2><p>{{OVERVIEW}}</p></section>
+  <section><h2>① 개요</h2><p>{{OVERVIEW}}</p></section>
 
   <!-- 벤치마크/비교 바차트: chart.series[]에서 채운다. 대표 모델 행에 class="bar"(강조), 나머지 class="bar muted".
        fill의 width는 chart 값의 정규화 백분율(최댓값=100%)이며 04_analysis.json의 series[].pct를 그대로 쓴다.
@@ -180,7 +174,7 @@
       <div class="track"><div class="fill" style="width:{{BAR_5_PCT}}%"></div></div></div>
   </div>
 
-  <section><h2>② 주요내용 <span class="en">Deep Dive</span></h2>
+  <section><h2>② 주요내용</h2>
     <!-- 대표 이미지가 있으면 본문 우측에 플로팅(제목과 충돌 방지). 없으면 .figure 통째 삭제 -->
     <div class="figure">
       <img src="{{IMAGE_LOCAL}}" alt="">
@@ -188,17 +182,16 @@
     </div>
     {{MAIN_CONTENT_HTML}}</section>
 
-  <section><h2>③ 시사점 <span class="en">Implications</span></h2>
+  <section><h2>③ 시사점</h2>
     <div class="implbox">
-      <span class="lens">{{LENS_LABEL}}</span>
       <p style="margin-bottom:0">{{IMPLICATIONS}}</p>
     </div>
   </section>
 
-  <section class="sources"><h2>④ 출처 · 더 읽을거리 <span class="en">Sources</span></h2>
+  <section class="sources"><h2>④ 출처</h2>
     <ul>
-      <li><a href="{{SRC_URL}}">{{SRC_TITLE}}</a> — {{SRC_NOTE}}</li>
-      <!-- 관련 원천 반복 -->
+      <li><a href="{{SRC_URL}}">{{SRC_TITLE}}</a></li>
+      <!-- 관련 원천 반복. 원천 자료 제목만 표기(한글 부연 없음) -->
     </ul>
   </section>
 
