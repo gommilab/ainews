@@ -102,6 +102,7 @@ background:#f4f6f9;color:#0f172a;line-height:1.6}
 .top .brand{font-weight:800;font-size:15px}
 .top a{color:#cbd5e1;text-decoration:none;font-size:14px}.top a:hover{color:#fff}
 .top a.brand{color:#fff}
+.top .sig{color:#94a3b8;font-size:13px;font-weight:600}
 .wrap{max-width:860px;margin:0 auto;padding:24px 18px 60px}
 h1{font-size:21px;margin:4px 0}
 .sub{color:#64748b;font-size:13.5px;margin-bottom:18px}
@@ -172,11 +173,10 @@ def render(items):
 <title>AI Outlook — 심층 브리프(PDF)</title><style>{CSS}</style></head><body>
 <header class="top"><a class="brand" href="index.html">📄 AI Outlook</a>
 <a href="index.html">Top 20 뉴스</a><a href="digest.html">심층 브리프(PDF)</a>
-<span class="sp"></span></header>
+<span class="sp"></span><span class="sig">@gommilab</span></header>
 <main class="wrap">
 <h1>심층 브리프(PDF)</h1>
 {body}
-<div class="foot">@gommilab</div>
 </main></body></html>"""
 
 

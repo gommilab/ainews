@@ -88,6 +88,7 @@ background:#f4f6f9;color:#0f172a;line-height:1.55}}
 .top .brand{{font-weight:800;letter-spacing:-.3px;font-size:15px}}
 .top a{{color:#cbd5e1;text-decoration:none;font-size:14px}}.top a:hover{{color:#fff}}
 .top a.brand{{color:#fff}}
+.top .sig{{color:#94a3b8;font-size:13px;font-weight:600}}
 .top .sp{{flex:1}}
 .wrap{{max-width:880px;margin:0 auto;padding:24px 18px 60px}}
 h1{{font-size:22px;margin:2px 0 4px;letter-spacing:-.4px}}
@@ -116,10 +117,10 @@ border-radius:5px;padding:1px 7px;margin-left:7px}}
 </style></head><body>
 <header class="top"><a class="brand" href="./">📰 AI Outlook</a>
 <a href="./">Top 20 뉴스</a><a href="digest.html">심층 브리프(PDF)</a>
-<span class="sp"></span></header>
+<span class="sp"></span><span class="sig">@gommilab</span></header>
 <main class="wrap">
 <h1>AI 뉴스 Top 20</h1>
-<div class="sub">매일 06:00 KST · 글로벌 매체·AI타임스·기술동향·5개국 정책을 통합 선별 · 제목 클릭 시 원문</div>
+<div class="sub">매일 글로벌 정보채널로부터 AI 기술·정책 동향을 통합 수집하여 제공합니다.</div>
 """
 
     if empty:
@@ -160,8 +161,7 @@ render('{latest}');
 </script>
 """
 
-    page += """<div class="foot">@gommilab</div>
-</main></body></html>"""
+    page += """</main></body></html>"""
 
     with open(OUT_HTML, "w", encoding="utf-8") as f:
         f.write(page)
