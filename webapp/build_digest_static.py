@@ -178,7 +178,7 @@ def render(items):
 <main class="wrap">
 <h1>Deep Brief</h1>
 {body}
-<div class="foot">※ aitimes.kr 상류 1차 출처를 자동 수집·분석한 참고용 브리프로, 내용의 정확성·완전성을 보장하지 않으며 투자·정책 판단의 근거로 사용할 수 없습니다. 저작권은 각 원 출처에 있습니다.</div>
+<div class="foot">※ aitimes.kr 상류 1차 출처를 자동 수집·분석한 참고용 브리프로, 내용의 정확성·완전성을 보장하지 않으며 투자·정책 판단의 근거로 사용할 수 없습니다.<br>저작권은 각 원 출처에 있습니다.</div>
 </main></body></html>"""
 
 

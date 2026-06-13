@@ -23,6 +23,8 @@ WORKSPACE = os.path.join(ROOT, "_workspace")
 REPORTS = os.path.join(ROOT, "reports")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 TOP_N = 20
+# Top 20에 반드시 각 1건 이상 포함을 보장할 기술 소스(그날 수집물이 있을 때만)
+GUARANTEED_KEYS = ["arxiv", "huggingface", "github"]
 
 # 소스별 메타: (section, 기본 출처명, tier 점수). tier가 높을수록 상위.
 SOURCE_META = {
@@ -82,6 +84,7 @@ def load_source(path, source_key):
             "category": cat,
             "section": section,
             "_tier": tier,
+            "_skey": source_key,
         })
     return out
 
@@ -120,8 +123,25 @@ def aggregate(date):
     newest = max((_date_value(r["published"]) for r in deduped), default=0)
     deduped.sort(key=lambda r: (-score(r, newest), -_date_value(r["published"])))
 
+    selected = deduped[:TOP_N]
+    # 보장 슬롯: arxiv·huggingface·github가 그날 수집물이 있는데 Top N 밖이면,
+    # 비(非)보장 소스 중 점수 최저 항목과 교체해 각 1건 이상 포함시킨다.
+    if len(deduped) > TOP_N:
+        present = {r["_skey"] for r in selected}
+        for req in GUARANTEED_KEYS:
+            if req in present:
+                continue
+            cand = next((r for r in deduped[TOP_N:] if r["_skey"] == req), None)
+            if not cand:
+                continue  # 그날 해당 소스 수집물 없음 → 건너뜀
+            victim_idx = next((i for i in range(len(selected) - 1, -1, -1)
+                               if selected[i]["_skey"] not in GUARANTEED_KEYS), len(selected) - 1)
+            selected[victim_idx] = cand
+            present.add(req)
+        selected.sort(key=lambda r: (-score(r, newest), -_date_value(r["published"])))
+
     items = []
-    for i, r in enumerate(deduped[:TOP_N], 1):
+    for i, r in enumerate(selected, 1):
         items.append({
             "rank": i,
             "title_ko": r["title_ko"],
