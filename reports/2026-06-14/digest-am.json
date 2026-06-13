@@ -1,18 +1,18 @@
 {
   "date": "2026-06-14",
   "round": "am",
-  "headline_ko": "문샷 AI, Kimi K2.7-Code 공개",
-  "subhead": "1T MoE 오픈웨이트 코딩 모델",
-  "topic_kind": "model",
-  "perspective": "both",
+  "headline_ko": "미 정부, Fable 5·Mythos 5 외국인 차단",
+  "subhead": "앤트로픽, Fable 5·Mythos 5 접근 전면 중단",
+  "topic_kind": "mixed",
+  "perspective": "both(정책 주관점)",
   "keywords": [
-    "Moonshot AI",
-    "Kimi K2.7-Code",
-    "K2.6",
-    "MCP Mark Verified",
-    "Modified MIT"
+    "Anthropic",
+    "Fable 5",
+    "Mythos 5",
+    "Commerce Department",
+    "Pliny the Liberator"
   ],
-  "primary_source": "Moonshot AI (Hugging Face model card)",
+  "primary_source": "Anthropic (공식 성명)",
   "pdf": "reports/2026-06-14/digest-am.pdf",
   "pages": 2,
   "generator": "GPT-5.5 draft × Opus 4.8 verify"
