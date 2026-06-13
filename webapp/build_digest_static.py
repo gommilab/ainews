@@ -124,7 +124,8 @@ border-bottom:2px solid #e6e9ef}
 border:1px solid #e2e8f0;border-radius:7px;padding:4px 11px;text-decoration:none}
 .dl:hover{background:#e2e8f0}
 .empty{background:#fff;border:1px dashed #cbd5e1;border-radius:12px;padding:40px;text-align:center;color:#64748b}
-.foot{margin-top:36px;color:#94a3b8;font-size:12px;text-align:center}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid #e6e9ef;color:#94a3b8;
+font-size:11.5px;line-height:1.55;text-align:center}
 """
 
 
@@ -170,13 +171,14 @@ def render(items):
         body = '<div class="empty">아직 생성된 심층 브리프가 없습니다.</div>'
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Outlook — 심층 브리프(PDF)</title><style>{CSS}</style></head><body>
+<title>AI Outlook — Deep Brief</title><style>{CSS}</style></head><body>
 <header class="top"><a class="brand" href="index.html">📄 AI Outlook</a>
-<a href="index.html">Top 20 뉴스</a><a href="digest.html">심층 브리프(PDF)</a>
+<a href="index.html">Top 20 뉴스</a><a href="digest.html">Deep Brief</a>
 <span class="sp"></span><span class="sig">@gommilab</span></header>
 <main class="wrap">
-<h1>심층 브리프(PDF)</h1>
+<h1>Deep Brief</h1>
 {body}
+<div class="foot">※ aitimes.kr 상류 1차 출처를 자동 수집·분석한 참고용 브리프로, 내용의 정확성·완전성을 보장하지 않으며 투자·정책 판단의 근거로 사용할 수 없습니다. 저작권은 각 원 출처에 있습니다.</div>
 </main></body></html>"""
 
 

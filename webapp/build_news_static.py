@@ -113,10 +113,11 @@ ol.list li.t1::before{{background:#1d4ed8}}
 .cat{{display:inline-block;font-size:11px;font-weight:700;background:#eef2f7;color:#475569;
 border-radius:5px;padding:1px 7px;margin-left:7px}}
 .empty{{background:#fff;border:1px dashed #cbd5e1;border-radius:12px;padding:44px;text-align:center;color:#64748b}}
-.foot{{margin-top:34px;color:#94a3b8;font-size:12px;text-align:center}}
+.foot{{margin-top:30px;padding-top:14px;border-top:1px solid #e6e9ef;color:#94a3b8;
+font-size:11.5px;line-height:1.55;text-align:center}}
 </style></head><body>
 <header class="top"><a class="brand" href="./">📰 AI Outlook</a>
-<a href="./">Top 20 뉴스</a><a href="digest.html">심층 브리프(PDF)</a>
+<a href="./">Top 20 뉴스</a><a href="digest.html">Deep Brief</a>
 <span class="sp"></span><span class="sig">@gommilab</span></header>
 <main class="wrap">
 <h1>AI 뉴스 Top 20</h1>
@@ -161,7 +162,8 @@ render('{latest}');
 </script>
 """
 
-    page += """</main></body></html>"""
+    page += """<div class="foot">※ 공개된 출처를 자동 수집·요약한 참고용 정보로, 내용의 정확성·완전성을 보장하지 않습니다. 저작권은 각 원 출처에 있으며, 정확한 내용은 원문 링크를 확인하시기 바랍니다.</div>
+</main></body></html>"""
 
     with open(OUT_HTML, "w", encoding="utf-8") as f:
         f.write(page)
