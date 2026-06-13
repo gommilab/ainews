@@ -100,7 +100,8 @@ SYSTEM_PROMPT = (
     "④ dossier에 근거가 약하면 단정 대신 한계를 적는다. 형용사·수식어를 줄이고 검증 가능한 사실 위주로 쓴다. "
     "반드시 아래 키를 가진 JSON 하나만 출력한다(코드블록·설명 금지):\n"
     "{\n"
-    '  "headline_ko": "한 줄 제목(dossier 제목을 다듬어도 됨)",\n'
+    '  "headline_ko": "제목 — **원천(1차 출처) 제목 기반으로 간결하게**. 핵심 주체·대상만 담아 한 절로(예: \'앤스로픽, 프런티어 모델 Claude Fable 5·Mythos 5 공개\'). 군더더기 수식·평가어 금지. 부연 설명은 subhead로 분리하고 제목에 \'—\'로 덧붙이지 않는다. 35자 이내 권장",\n'
+    '  "subhead": "부제 — 제목을 보완하는 한 줄 설명(선택). 제목에 다 못 담은 핵심 포인트 한 가지를 짧게. 불필요하면 빈 문자열. 40자 이내",\n'
     '  "topic_kind": "model|tech|research|policy|regulation|standard|investment|infra|chip|mixed 중 하나",\n'
     '  "perspective": "research|policy|both(주관점 명시) — 시사점의 무게중심",\n'
     '  "keywords": ["제목 아래 배지로 노출할 주요 키워드 5개 이내. 기업·모델명·핵심 고유명사 위주(예: Anthropic, Mythos5, Fable5, Opus4.8). dossier에 등장한 표기 그대로, 일반어·관점명 금지"],\n'

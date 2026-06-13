@@ -43,7 +43,9 @@
 
   /* ── 헤드라인 + 키워드 ── */
   h1 { font-size: 17pt; font-weight: 800; line-height: 1.22; letter-spacing: -0.5px;
-       margin: 2px 0 7px; color: #14213d; }
+       margin: 2px 0 4px; color: #14213d; }
+  .dek { font-size: 11pt; font-weight: 600; line-height: 1.35; color: #475569;
+         letter-spacing: -0.2px; margin: 0 0 8px; }
   .badges { margin: 0 0 9px; }
   .badge { display: inline-block; background: #eef3fb; color: #1d4ed8; border: 1px solid #d6e2f7;
            border-radius: 20px; padding: 1px 10px; margin: 0 5px 4px 0; font-size: 8.3pt; font-weight: 700; }
@@ -127,6 +129,8 @@
   </div>
 
   <h1>{{HEADLINE_KO}}</h1>
+  <!-- 부제(보조 설명) — 한 줄 이내. 출처 제목 기반의 간결한 제목을 보완. 없으면 이 <p> 통째 삭제 -->
+  <p class="dek">{{SUBHEAD}}</p>
   <div class="badges">
     <!-- 주요 키워드 5개 이내. 첫 배지에 class="badge lead"로 강조 가능. 안 쓰는 슬롯은 삭제 -->
     <span class="badge lead">{{KEYWORD_1}}</span>
