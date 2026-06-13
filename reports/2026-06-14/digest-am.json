@@ -1,0 +1,19 @@
+{
+  "date": "2026-06-14",
+  "round": "am",
+  "headline_ko": "문샷 AI, Kimi K2.7-Code 공개",
+  "subhead": "1T MoE 오픈웨이트 코딩 모델",
+  "topic_kind": "model",
+  "perspective": "both",
+  "keywords": [
+    "Moonshot AI",
+    "Kimi K2.7-Code",
+    "K2.6",
+    "MCP Mark Verified",
+    "Modified MIT"
+  ],
+  "primary_source": "Moonshot AI (Hugging Face model card)",
+  "pdf": "reports/2026-06-14/digest-am.pdf",
+  "pages": 2,
+  "generator": "GPT-5.5 draft × Opus 4.8 verify"
+}

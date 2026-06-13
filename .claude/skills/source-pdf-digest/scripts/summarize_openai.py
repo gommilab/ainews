@@ -218,10 +218,11 @@ def build_user_payload(dossier, selection):
 
 def call_openai(api_key, model, messages):
     url = f"{BASE_URL}/chat/completions"
+    # 일부 신모델(gpt-5.x)은 temperature 커스텀을 막고 기본값(1)만 허용 → 1로 고정(호환).
     body = json.dumps({
         "model": model,
         "messages": messages,
-        "temperature": 0.3,
+        "temperature": 1,
         "response_format": {"type": "json_object"},
     }).encode("utf-8")
     req = urllib.request.Request(
@@ -326,6 +327,7 @@ def main():
         "round": rnd,
         "generator": f"openai:{model}",
         "headline_ko": gen.get("headline_ko") or dossier.get("headline_ko"),
+        "subhead": (gen.get("subhead") or "").strip(),
         "primary_source": dossier.get("primary_source"),
         "image_url": dossier.get("image_url"),
         "topic_kind": gen.get("topic_kind") or dossier.get("topic_kind"),
