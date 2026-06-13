@@ -116,8 +116,7 @@ border-radius:5px;padding:1px 7px;margin-left:7px}}
 </style></head><body>
 <header class="top"><a class="brand" href="./">📰 AI Outlook</a>
 <a href="./">Top 20 뉴스</a><a href="digest.html">심층 브리프(PDF)</a>
-<span class="sp"></span>
-<a href="https://github.com/gommilab/ainews" target="_blank">GitHub</a></header>
+<span class="sp"></span></header>
 <main class="wrap">
 <h1>AI 뉴스 Top 20</h1>
 <div class="sub">매일 06:00 KST · 글로벌 매체·AI타임스·기술동향·5개국 정책을 통합 선별 · 제목 클릭 시 원문</div>
@@ -161,7 +160,7 @@ render('{latest}');
 </script>
 """
 
-    page += """<div class="foot">harness-ainews-brief · 매일 06:00 KST 자동 집계 · 글로벌 AI 동향 데일리</div>
+    page += """<div class="foot">@gommilab</div>
 </main></body></html>"""
 
     with open(OUT_HTML, "w", encoding="utf-8") as f:

@@ -172,12 +172,11 @@ def render(items):
 <title>AI Outlook — 심층 브리프(PDF)</title><style>{CSS}</style></head><body>
 <header class="top"><a class="brand" href="index.html">📄 AI Outlook</a>
 <a href="index.html">Top 20 뉴스</a><a href="digest.html">심층 브리프(PDF)</a>
-<span class="sp"></span>
-<a href="https://github.com/gommilab/ainews" target="_blank">GitHub</a></header>
+<span class="sp"></span></header>
 <main class="wrap">
 <h1>심층 브리프(PDF)</h1>
 {body}
-<div class="foot">harness-ainews-brief · 매일 06:00·18:00 KST 자동 생성 · 과학기술 연구자·정책자용</div>
+<div class="foot">@gommilab</div>
 </main></body></html>"""
 
 
