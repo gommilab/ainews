@@ -106,7 +106,13 @@ h1{font-size:21px;margin:4px 0}
 .sub{color:#64748b;font-size:13.5px;margin-bottom:18px}
 .card{background:#fff;border:1px solid #e6e9ef;border-radius:12px;padding:16px 18px;margin-bottom:12px}
 .card .meta{font-size:12px;color:#94a3b8;margin-bottom:5px}
+.card .rnd{display:inline-block;font-size:11px;font-weight:800;border-radius:5px;padding:1px 8px;
+margin-right:6px;background:#1d4ed8;color:#fff;letter-spacing:.3px}
 .card .ttl{font-size:16px;font-weight:700;line-height:1.4;margin-bottom:8px}
+.daygroup{margin-bottom:8px}
+.dayhd{font-size:13px;font-weight:800;color:#14213d;margin:18px 0 9px;padding-bottom:5px;
+border-bottom:2px solid #e6e9ef}
+.top .sp{flex:1}
 .badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 9px;margin-right:5px}
 .b-src{background:#14213d;color:#fff}.b-lens{background:#1d4ed8;color:#fff}.b-kind{background:#eef2f7;color:#475569}
 .dl{display:inline-block;margin-top:10px;background:#1d4ed8;color:#fff;font-weight:700;font-size:13.5px;
@@ -117,40 +123,54 @@ border-radius:8px;padding:8px 16px;text-decoration:none}
 """
 
 
+def render_card(it):
+    d, rnd = it.get("date"), it.get("round")
+    kws = it.get("keywords") or []
+    if kws:
+        badges = "".join(f'<span class="badge b-src">{esc(k)}</span>' for k in kws[:5])
+    else:
+        badges = (f'<span class="badge b-src">{esc(it.get("primary_source"))}</span>'
+                  f'<span class="badge b-kind">{esc(it.get("topic_kind"))}</span>')
+    sub = f'<div class="meta" style="margin:6px 0 0">{esc(it.get("subhead"))}</div>' \
+        if it.get("subhead") else ""
+    if it.get("_has_pdf") and it.get("pdf"):
+        dl = (f'<a class="dl" href="{esc(it["pdf"])}" target="_blank">📄 PDF 다운로드 '
+              f'({esc(it.get("pages"))}p)</a>')
+    else:
+        dl = '<span style="color:#ef4444;font-size:13px">PDF 준비 중</span>'
+    return f"""<div class="card">
+<div class="ttl"><span class="rnd">{esc(ROUND_KO.get(rnd, rnd)).upper()}</span>{esc(it.get("headline_ko"))}</div>
+{sub}
+<div style="margin-top:8px">{badges}</div>
+{dl}
+</div>"""
+
+
 def render(items):
     if items:
-        cards = []
+        # 날짜별 그룹(최신 날짜 먼저), 각 날짜 안에서 am·pm 정렬
+        by_date = {}
         for it in items:
-            d, rnd = it.get("date"), it.get("round")
-            kws = it.get("keywords") or []
-            if kws:
-                badges = "".join(f'<span class="badge b-src">{esc(k)}</span>' for k in kws[:5])
-            else:
-                badges = (f'<span class="badge b-src">{esc(it.get("primary_source"))}</span>'
-                          f'<span class="badge b-kind">{esc(it.get("topic_kind"))}</span>'
-                          f'<span class="badge b-lens">{esc(it.get("perspective"))} 관점</span>')
-            if it.get("_has_pdf") and it.get("pdf"):
-                dl = (f'<a class="dl" href="{esc(it["pdf"])}" target="_blank">📄 PDF 다운로드 '
-                      f'({esc(it.get("pages"))}p)</a>')
-            else:
-                dl = '<span style="color:#ef4444;font-size:13px">PDF 준비 중</span>'
-            cards.append(f"""<div class="card">
-<div class="meta">📡 {esc(d)} · {ROUND_KO.get(rnd, rnd)}</div>
-<div class="ttl">{esc(it.get("headline_ko"))}</div>
-<div>{badges}</div>
-{dl}
-</div>""")
-        body = "".join(cards)
+            by_date.setdefault(it.get("date"), []).append(it)
+        groups = []
+        for d in sorted(by_date, reverse=True):
+            rounds = sorted(by_date[d], key=lambda x: x.get("round", ""))  # am, pm
+            cards = "".join(render_card(it) for it in rounds)
+            groups.append(f'<div class="daygroup"><div class="dayhd">📅 {esc(d)} '
+                          f'· {len(rounds)}건</div>{cards}</div>')
+        body = "".join(groups)
     else:
         body = '<div class="empty">아직 생성된 심층 브리프가 없습니다.</div>'
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Outlook — 심층 브리프</title><style>{CSS}</style></head><body>
-<header class="top"><span class="brand">📡 AI Outlook</span>
-<a href="index.html">← 랜딩</a><a href="https://github.com/gommilab/ainews" target="_blank">GitHub</a></header>
+<title>AI Outlook — 심층 브리프(PDF)</title><style>{CSS}</style></head><body>
+<header class="top"><span class="brand">📄 AI Outlook</span>
+<a href="index.html">랜딩</a><a href="news.html">Top 20 뉴스</a><a href="digest.html">심층 브리프(PDF)</a>
+<span class="sp"></span>
+<a href="https://github.com/gommilab/ainews" target="_blank">GitHub</a></header>
 <main class="wrap">
-<h1>원천 심층 브리프</h1>
-<div class="sub">aitimes.kr 상류 1차 원천을 직접 감시 · 그날 핫이슈 1건 심층분석 · A4 1~2p PDF · 하루 2회</div>
+<h1>원천 심층 브리프 · PDF 아카이브</h1>
+<div class="sub">aitimes.kr 상류 1차 원천을 직접 감시 · 그날 핫이슈 1건 심층분석 · A4 1~2p PDF · 매일 am·pm 2회 · 카드의 PDF 다운로드 버튼으로 내려받기</div>
 {body}
 <div class="foot">harness-ainews-brief · 매일 06:00·18:00 KST 자동 생성 · 과학기술 연구자·정책자용</div>
 </main></body></html>"""

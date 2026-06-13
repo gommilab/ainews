@@ -19,6 +19,7 @@
 **변경 이력:**
 | 날짜 | 변경 내용 | 대상 | 사유 |
 |------|----------|------|------|
+| 2026-06-14 | **Top 20 데일리 뉴스 목록 + PDF 아카이브 포털** — ① 신규 집계기 `webapp/aggregate_top20.py`: ainews 전 소스(`01_collect_*.json`: 글로벌·AI타임스·기술·정책)를 통합·URL중복제거·결정적 중요도 점수(소스 tier+카테고리 가중+최신성)로 **Top 20** 선별 → `reports/{date}/top20.json`(영속) 기록. ② 신규 포털 `news.html`(빌더 `webapp/build_news_static.py`): 오늘 기준 Top 20을 **순위·한글제목(클릭=원문)·원문 병기·출처명·일자**로 보여주고, 날짜 셀렉터로 이전 날짜 아카이브 조회(정적: 전 날짜 데이터 임베드+JS 전환, 무JS 초기렌더 포함). ③ `digest.html`(PDF 브리프)을 **날짜별 그룹·am/pm 배지·부제·키워드·PDF 다운로드 버튼**으로 개편. ④ 랜딩(index.html)·각 포털 nav에 'Top 20 뉴스'·'심층 브리프(PDF)' 상호링크. ⑤ `ainews-orchestrator`에 Phase 5(Top 20 집계+포털 빌드+커밋·푸시) 신설, 1일 1회(am) 집계. 제목=한글+원문 병기, 소스=기존 전 소스 통합, 생성=06:00 KST | webapp/aggregate_top20.py(신규)·build_news_static.py(신규)·build_digest_static.py·build_static.py, index.html, ainews-orchestrator | 사용자 요청: 매일 Top 20 뉴스(제목·출처·일자·링크)+날짜 아카이브, am/pm PDF 목록 관리·다운로드 |
 | 2026-06-07 | 초기 구성 (수집×2·편집·발송 에이전트, 수집/정책/조립/발송/오케스트레이터 스킬, 07:00 KST 예약) | 전체 | - |
 | 2026-06-07 | 카드 테두리 추가 + 실제 대표 이미지 추출 강화(og/twitter/본문img 체인, arXiv→HF papers 썸네일, extract_og_image.sh 번들) | brief-composition(템플릿+스킬), news-collection(스킬+scripts), policy-collection | 사용자 피드백: 카드 영역 구분·실제 이미지 |
 | 2026-06-07 | 발송 방식 SMTP 자동발송으로 전환(send_brief_smtp.py 번들, 환경변수 SMTP_USER/SMTP_PASS, 전용 발송계정). 예약 routine 프롬프트도 SMTP로 갱신. Gmail MCP는 드래프트(수동/테스트)로 강등 | email-delivery(스킬+scripts), mail-dispatcher, 원격 routine | 완전 자동발송 선택(B), 보안: 전용계정+환경변수 |
