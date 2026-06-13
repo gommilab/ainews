@@ -13,6 +13,7 @@
 외부 의존성 없음(표준 라이브러리).
 사용:  python3 webapp/aggregate_top20.py <YYYY-MM-DD>   # 생략 시 _workspace 최신 날짜
 """
+import datetime
 import json
 import os
 import re
@@ -23,6 +24,9 @@ WORKSPACE = os.path.join(ROOT, "_workspace")
 REPORTS = os.path.join(ROOT, "reports")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 TOP_N = 20
+# 수집 시점 ±12h 윈도 ≈ 당일 + 전일(데이터가 날짜 단위라 인접 1일 포함). 최신성 유지용.
+WINDOW_DAYS_BACK = 1
+WINDOW_DAYS_FWD = 0
 # Top 20에 반드시 각 1건 이상 포함을 보장할 기술 소스(그날 수집물이 있을 때만)
 GUARANTEED_KEYS = ["arxiv", "huggingface", "github"]
 
@@ -54,6 +58,19 @@ def _date_value(published):
 
 def _norm_title(t):
     return re.sub(r"\s+", " ", str(t or "")).strip().lower()
+
+
+def _window_values(date_str, days_back=WINDOW_DAYS_BACK, days_fwd=WINDOW_DAYS_FWD):
+    """대상일 기준 [−days_back, +days_fwd] 범위의 날짜 정수키 집합(±12h≈당일+전일)."""
+    m = re.match(r"(\d{4})-(\d{2})-(\d{2})", date_str or "")
+    if not m:
+        return set()
+    base = datetime.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+    out = set()
+    for delta in range(-days_back, days_fwd + 1):
+        dt = base + datetime.timedelta(days=delta)
+        out.add(dt.year * 10000 + dt.month * 100 + dt.day)
+    return out
 
 
 def load_source(path, source_key):
@@ -103,6 +120,31 @@ def score(rec, newest):
     return s
 
 
+def load_featured(wdir):
+    """01_collect_featured.json — Issue 리포트 주제 등 '고정 포함' 항목(날짜 필터 면제)."""
+    path = os.path.join(wdir, "01_collect_featured.json")
+    if not os.path.isfile(path):
+        return []
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return []
+    out = []
+    for it in data.get("items") or []:
+        out.append({
+            "title_ko": it.get("title_ko") or it.get("title_orig") or "(제목 없음)",
+            "title_orig": it.get("title_orig") or "",
+            "source": it.get("source") or "Featured",
+            "url": it.get("url") or "",
+            "published": it.get("published") or "",
+            "category": it.get("category") or "",
+            "section": "featured",
+            "_tier": 999, "_skey": "featured", "_featured": True,
+        })
+    return out
+
+
 def aggregate(date):
     wdir = os.path.join(WORKSPACE, date)
     records = []
@@ -111,34 +153,53 @@ def aggregate(date):
         if os.path.isfile(path):
             records.extend(load_source(path, key))
 
-    # 중복 제거: URL 우선, 없으면 정규화 제목
+    # 수집 시점 ±12h 윈도(당일+전일) 안에 등록된 항목만 — 최신성 유지, 오래된 항목 제외.
+    window = _window_values(date)
+    if window:
+        records = [r for r in records if _date_value(r["published"]) in window]
+
+    # featured(Issue 리포트 주제 등)는 날짜 필터 면제 + 항상 맨 앞 고정.
+    featured = load_featured(wdir)
+
+    # 중복 제거: URL 우선, 없으면 정규화 제목 (featured 우선)
     seen, deduped = set(), []
-    for r in records:
+    for r in featured + records:
         k = (r["url"].strip().rstrip("/").lower() or _norm_title(r["title_ko"]))
         if k in seen:
             continue
         seen.add(k)
         deduped.append(r)
 
+    feat = [r for r in deduped if r.get("_featured")]
+    rest = [r for r in deduped if not r.get("_featured")]
     newest = max((_date_value(r["published"]) for r in deduped), default=0)
-    deduped.sort(key=lambda r: (-score(r, newest), -_date_value(r["published"])))
+    rest.sort(key=lambda r: (-score(r, newest), -_date_value(r["published"])))
 
-    selected = deduped[:TOP_N]
-    # 보장 슬롯: arxiv·huggingface·github가 그날 수집물이 있는데 Top N 밖이면,
-    # 비(非)보장 소스 중 점수 최저 항목과 교체해 각 1건 이상 포함시킨다.
-    if len(deduped) > TOP_N:
+    room = max(0, TOP_N - len(feat))
+    selected = feat + rest[:room]
+    # 보장 슬롯: arxiv·huggingface·github가 그날 수집물이 있는데 선택 밖이면,
+    # 비(非)보장·비featured 소스 중 점수 최저 항목과 교체해 각 1건 이상 포함.
+    if len(rest) > room:
         present = {r["_skey"] for r in selected}
         for req in GUARANTEED_KEYS:
             if req in present:
                 continue
-            cand = next((r for r in deduped[TOP_N:] if r["_skey"] == req), None)
+            cand = next((r for r in rest[room:] if r["_skey"] == req), None)
             if not cand:
-                continue  # 그날 해당 소스 수집물 없음 → 건너뜀
+                continue
             victim_idx = next((i for i in range(len(selected) - 1, -1, -1)
-                               if selected[i]["_skey"] not in GUARANTEED_KEYS), len(selected) - 1)
+                               if not selected[i].get("_featured")
+                               and selected[i]["_skey"] not in GUARANTEED_KEYS), None)
+            if victim_idx is None:
+                continue
             selected[victim_idx] = cand
             present.add(req)
-        selected.sort(key=lambda r: (-score(r, newest), -_date_value(r["published"])))
+
+    # featured 맨 앞, 나머지는 점수순
+    feat_sel = [r for r in selected if r.get("_featured")]
+    rest_sel = [r for r in selected if not r.get("_featured")]
+    rest_sel.sort(key=lambda r: (-score(r, newest), -_date_value(r["published"])))
+    selected = feat_sel + rest_sel
 
     items = []
     for i, r in enumerate(selected, 1):
