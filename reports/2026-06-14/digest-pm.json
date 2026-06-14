@@ -1,20 +1,20 @@
 {
   "date": "2026-06-14",
   "round": "pm",
-  "headline_ko": "중국, 국가 AI 데이터센터망 초안",
-  "subhead": "2조 위안·자국산 칩 80% 의무 거론",
+  "headline_ko": "오픈AI, Ona 인수 발표",
+  "subhead": "Codex 장시간 실행 인프라 확보",
   "topic_kind": "infra",
-  "perspective": "policy",
+  "perspective": "both(연구·개발 주관점)",
   "keywords": [
-    "NDRC",
-    "Huawei",
-    "Alibaba",
-    "Shanghai Biren",
-    "SMIC"
+    "OpenAI",
+    "Ona",
+    "Gitpod",
+    "Codex",
+    "Claude Code"
   ],
-  "primary_source": "Bloomberg",
+  "primary_source": "OpenAI",
   "pdf": "reports/2026-06-14/digest-pm.pdf",
   "pages": 2,
   "generator": "GPT-5.5 draft × Opus 4.8 verify",
-  "pdf_name": "중국, 국가 AI 데이터센터망 초안.pdf"
+  "pdf_name": "오픈AI, Ona 인수 발표.pdf"
 }
