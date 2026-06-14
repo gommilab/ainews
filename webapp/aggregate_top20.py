@@ -155,9 +155,14 @@ def aggregate(date):
             records.extend(load_source(path, key))
 
     # 수집 시점 ±12h 윈도(당일+전일) 안에 등록된 항목만 — 최신성 유지, 오래된 항목 제외.
+    # 단, 기술 보장 소스(arXiv·HuggingFace·GitHub)는 윈도 면제: 주말·월요일 아침엔
+    # 윈도 안 발표분이 없을 수 있어(arXiv 미발표 등) 보장이 무력화되므로, 수집된 가장
+    # 신선한 항목으로 항상 후보에 넣어 각 1건 이상 포함 보장이 실제로 작동하게 한다.
     window = _window_values(date)
     if window:
-        records = [r for r in records if _date_value(r["published"]) in window]
+        records = [r for r in records
+                   if r["_skey"] in GUARANTEED_KEYS
+                   or _date_value(r["published"]) in window]
 
     # featured(Issue 리포트 주제 등)는 날짜 필터 면제 + 항상 맨 앞 고정.
     featured = load_featured(wdir)

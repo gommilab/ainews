@@ -1,6 +1,6 @@
 {
   "date": "2026-06-15",
-  "count": 7,
+  "count": 10,
   "items": [
     {
       "rank": 1,
@@ -70,6 +70,36 @@
       "url": "https://github.com/andrewyng/aisuite",
       "published": "2026-06-15",
       "category": "github",
+      "section": "tech"
+    },
+    {
+      "rank": 8,
+      "title_ko": "MiniMax, 1M 컨텍스트서 연산 28배 줄이는 블록 단위 희소 어텐션 'MSA' 공개",
+      "title_orig": "MiniMax Sparse Attention",
+      "source": "Hugging Face",
+      "url": "https://huggingface.co/papers/2606.13392",
+      "published": "2026-06-12",
+      "category": "huggingface",
+      "section": "tech"
+    },
+    {
+      "rank": 9,
+      "title_ko": "MiniMax Sparse Attention(MSA): 100만 토큰 컨텍스트에서 어텐션 연산을 28배 줄이는 블록 희소 어텐션",
+      "title_orig": "MiniMax Sparse Attention",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2606.13392",
+      "published": "2026-06-12",
+      "category": "arxiv",
+      "section": "tech"
+    },
+    {
+      "rank": 10,
+      "title_ko": "ReSum: 강화학습으로 LLM의 추론과 요약을 결합해 추론 길이를 18.6% 줄이는 프레임워크",
+      "title_orig": "ReSum: Synergizing LLM Reasoning and Summarization with Reinforcement Learning",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2606.13316",
+      "published": "2026-06-12",
+      "category": "arxiv",
       "section": "tech"
     }
   ],
