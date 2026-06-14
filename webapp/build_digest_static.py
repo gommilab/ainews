@@ -60,11 +60,11 @@ def ingest_from_workspace():
             dst_dir = os.path.join(REPORTS, date)
             os.makedirs(dst_dir, exist_ok=True)
             if os.path.isfile(pdf):
-                # 저장 파일명 = '리포트제목.pdf' (뷰어에서 열어 저장해도 이 이름이 되도록 파일 자체를 그렇게 명명)
-                nicename = pdf_filename(meta.get("headline_ko"))
-                shutil.copyfile(pdf, os.path.join(dst_dir, nicename))
-                meta["pdf"] = f"reports/{date}/{nicename}"
-                meta["pdf_name"] = nicename
+                # 저장 파일은 안정적인 digest-{round}.pdf로 두고(제목 클릭=뷰어 보기),
+                # 'PDF' 박스 다운로드 시에는 download 속성으로 '제목.pdf' 파일명을 부여한다.
+                shutil.copyfile(pdf, os.path.join(dst_dir, f"digest-{rnd}.pdf"))
+                meta["pdf"] = f"reports/{date}/digest-{rnd}.pdf"
+                meta["pdf_name"] = pdf_filename(meta.get("headline_ko"))
             meta["date"], meta["round"] = date, rnd
             json.dump(meta, open(os.path.join(dst_dir, f"digest-{rnd}.json"), "w",
                                  encoding="utf-8"), ensure_ascii=False, indent=2)
@@ -156,8 +156,8 @@ def render_card(it):
     rnd_badge = f'<span class="rnd">{esc(ROUND_KO.get(rnd, rnd)).upper()}</span>'
     headline = esc(it.get("headline_ko"))
     if it.get("_has_pdf") and it.get("pdf"):
-        # 파일 자체가 '리포트제목.pdf'로 저장돼 있어, 제목 클릭→뷰어에서 열어 저장해도 그 이름이 된다.
-        href = quote(it["pdf"], safe="/")               # 공백·한글·· 등 URL 인코딩
+        # 제목 클릭 → PDF 뷰어로 보기. 옆 'PDF' 박스 → download 속성으로 '제목.pdf' 파일명 다운로드.
+        href = quote(it["pdf"], safe="/")
         fname = it.get("pdf_name") or pdf_filename(it.get("headline_ko"))
         title = (f'{rnd_badge}<a class="ttl-link" href="{href}" target="_blank">{headline}</a>'
                  f'<a class="pdfbox" href="{href}" download="{html.escape(fname)}" '
