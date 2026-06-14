@@ -1,6 +1,6 @@
 {
   "date": "2026-06-14",
-  "count": 17,
+  "count": 18,
   "items": [
     {
       "rank": 1,
@@ -114,6 +114,16 @@
     },
     {
       "rank": 12,
+      "title_ko": "오픈AI, 미국 주 법무장관 연합 조사 받는다",
+      "title_orig": "",
+      "source": "디지털투데이",
+      "url": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=674822",
+      "published": "2026-06-13",
+      "category": "정책",
+      "section": "domestic"
+    },
+    {
+      "rank": 13,
       "title_ko": "Anthropic Fable 5 에이전트 트레이스 데이터셋 'Fable-5-traces' 등장",
       "title_orig": "Glint-Research/Fable-5-traces",
       "source": "Hugging Face",
@@ -123,7 +133,7 @@
       "section": "tech"
     },
     {
-      "rank": 13,
+      "rank": 14,
       "title_ko": "Claude Code용 Fable 5 트레이스 모음 'claude-fable-5-claude-code' 업데이트",
       "title_orig": "armand0e/claude-fable-5-claude-code",
       "source": "Hugging Face",
@@ -133,7 +143,7 @@
       "section": "tech"
     },
     {
-      "rank": 14,
+      "rank": 15,
       "title_ko": "컴퓨터 사용 에이전트 평가 벤치마크 'agents-last-exam' 트렌딩 상위",
       "title_orig": "agents-last-exam/agents-last-exam",
       "source": "Hugging Face",
@@ -143,7 +153,7 @@
       "section": "tech"
     },
     {
-      "rank": 15,
+      "rank": 16,
       "title_ko": "NVIDIA/SkillSpector — AI 에이전트 스킬을 설치 전 검사하는 보안 스캐너",
       "title_orig": "NVIDIA/SkillSpector",
       "source": "GitHub",
@@ -153,7 +163,7 @@
       "section": "tech"
     },
     {
-      "rank": 16,
+      "rank": 17,
       "title_ko": "addyosmani/agent-skills — AI 코딩 에이전트를 위한 실무급 엔지니어링 스킬 모음",
       "title_orig": "addyosmani/agent-skills",
       "source": "GitHub",
@@ -163,7 +173,7 @@
       "section": "tech"
     },
     {
-      "rank": 17,
+      "rank": 18,
       "title_ko": "LMCache/LMCache — LLM 추론을 가속하는 최고속 KV 캐시 계층",
       "title_orig": "LMCache/LMCache",
       "source": "GitHub",

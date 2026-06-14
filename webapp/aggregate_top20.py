@@ -32,12 +32,13 @@ GUARANTEED_KEYS = ["arxiv", "huggingface", "github"]
 
 # 소스별 메타: (section, 기본 출처명, tier 점수). tier가 높을수록 상위.
 SOURCE_META = {
-    "global":      ("global",  None,            100),  # media 필드 사용
-    "aitimes":     ("aitimes", "AI타임스",       72),
-    "policy":      ("policy",  None,             66),   # country 사용
-    "huggingface": ("tech",    "Hugging Face",   60),
-    "github":      ("tech",    "GitHub",         58),
-    "arxiv":       ("tech",    "arXiv",          56),
+    "global":      ("global",   None,            100),  # media 필드 사용
+    "aitimes":     ("aitimes",  "AI타임스",       72),
+    "domestic":    ("domestic", None,            68),   # 국내·크립토·금융 추가 매체(item별 source 사용)
+    "policy":      ("policy",   None,             66),   # country 사용
+    "huggingface": ("tech",     "Hugging Face",   60),
+    "github":      ("tech",     "GitHub",         58),
+    "arxiv":       ("tech",     "arXiv",          56),
 }
 
 # 카테고리/태그에 들어가면 가중치를 더하는 키워드(중요도 부스트)
@@ -90,7 +91,7 @@ def load_source(path, source_key):
             c = it.get("country")
             source = (f"{c} 정책" if c else (label or "정책"))
         else:
-            source = default_src or label
+            source = it.get("source") or default_src or label
         cat = it.get("category") or it.get("tag") or ""
         out.append({
             "title_ko": it.get("title_ko") or it.get("title_orig") or "(제목 없음)",

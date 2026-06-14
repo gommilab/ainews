@@ -101,7 +101,7 @@ margin-bottom:9px;position:relative}}
 ol.list li::before{{counter-increment:r;content:counter(r);position:absolute;left:13px;top:13px;
 width:26px;height:26px;border-radius:7px;background:#14213d;color:#fff;font-weight:800;font-size:13px;
 display:flex;align-items:center;justify-content:center}}
-ol.list li.t1::before{{background:#1d4ed8}}
+ol.list li.t1::before{{background:#14213d}}
 .ttl{{font-size:15.5px;font-weight:700;line-height:1.4;margin:0}}
 .ttl a{{color:#0f172a;text-decoration:none}}.ttl a:hover{{color:#1d4ed8;text-decoration:underline}}
 .orig{{font-size:12.5px;color:#94a3b8;margin-top:3px;line-height:1.35}}
