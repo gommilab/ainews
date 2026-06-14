@@ -1,0 +1,20 @@
+{
+  "date": "2026-06-14",
+  "round": "pm",
+  "headline_ko": "중국, 국가 AI 데이터센터망 초안",
+  "subhead": "2조 위안·자국산 칩 80% 의무 거론",
+  "topic_kind": "infra",
+  "perspective": "policy",
+  "keywords": [
+    "NDRC",
+    "Huawei",
+    "Alibaba",
+    "Shanghai Biren",
+    "SMIC"
+  ],
+  "primary_source": "Bloomberg",
+  "pdf": "reports/2026-06-14/digest-pm.pdf",
+  "pages": 2,
+  "generator": "GPT-5.5 draft × Opus 4.8 verify",
+  "pdf_name": "중국, 국가 AI 데이터센터망 초안.pdf"
+}
