@@ -110,19 +110,19 @@ h1{font-size:21px;margin:4px 0}
 .card .meta{font-size:12px;color:#94a3b8;margin-bottom:5px}
 .card .rnd{display:inline-block;font-size:11px;font-weight:800;border-radius:5px;padding:1px 8px;
 margin-right:6px;background:#1d4ed8;color:#fff;letter-spacing:.3px}
-.card .cardhd{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .card .ttl{font-size:16px;font-weight:700;line-height:1.4;margin:0}
-.card .cardhd .dl{margin-top:0;flex:none;white-space:nowrap;align-self:center}
-.pending{color:#ef4444;font-size:13px;flex:none;white-space:nowrap;align-self:center}
+.card .ttl-link{color:inherit;text-decoration:none}
+.card .ttl-link:hover{color:#1d4ed8;text-decoration:underline}
+.pdfbox{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;color:#64748b;
+background:#eef2f7;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;margin-left:7px;
+vertical-align:middle;text-decoration:none}
+.pdfbox.pending{color:#ef4444;background:#fef2f2;border-color:#fecaca}
 .daygroup{margin-bottom:8px}
 .dayhd{font-size:13px;font-weight:800;color:#14213d;margin:18px 0 9px;padding-bottom:5px;
 border-bottom:2px solid #e6e9ef}
 .top .sp{flex:1}
 .badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 9px;margin-right:5px}
 .b-src{background:#14213d;color:#fff}.b-lens{background:#1d4ed8;color:#fff}.b-kind{background:#eef2f7;color:#475569}
-.dl{display:inline-block;background:#eef2f7;color:#0f172a;font-weight:600;font-size:12px;
-border:1px solid #e2e8f0;border-radius:7px;padding:4px 11px;text-decoration:none}
-.dl:hover{background:#e2e8f0}
 .empty{background:#fff;border:1px dashed #cbd5e1;border-radius:12px;padding:40px;text-align:center;color:#64748b}
 .foot{margin-top:30px;padding-top:14px;border-top:1px solid #e6e9ef;color:#94a3b8;
 font-size:11.5px;line-height:1.55;text-align:center}
@@ -139,16 +139,16 @@ def render_card(it):
                   f'<span class="badge b-kind">{esc(it.get("topic_kind"))}</span>')
     sub = f'<div class="meta" style="margin:6px 0 0">{esc(it.get("subhead"))}</div>' \
         if it.get("subhead") else ""
+    rnd_badge = f'<span class="rnd">{esc(ROUND_KO.get(rnd, rnd)).upper()}</span>'
+    headline = esc(it.get("headline_ko"))
     if it.get("_has_pdf") and it.get("pdf"):
-        dl = (f'<a class="dl" href="{esc(it["pdf"])}" target="_blank">📄 PDF 보기 '
-              f'({esc(it.get("pages"))}p)</a>')
+        # 제목 클릭 → PDF 보기, 제목 옆 작은 회색 'PDF' 박스로 문서 존재를 표시
+        title = (f'{rnd_badge}<a class="ttl-link" href="{esc(it["pdf"])}" target="_blank">'
+                 f'{headline}<span class="pdfbox">PDF</span></a>')
     else:
-        dl = '<span class="pending">PDF 준비 중</span>'
+        title = f'{rnd_badge}{headline}<span class="pdfbox pending">준비 중</span>'
     return f"""<div class="card">
-<div class="cardhd">
-<div class="ttl"><span class="rnd">{esc(ROUND_KO.get(rnd, rnd)).upper()}</span>{esc(it.get("headline_ko"))}</div>
-{dl}
-</div>
+<div class="ttl">{title}</div>
 {sub}
 <div style="margin-top:8px">{badges}</div>
 </div>"""

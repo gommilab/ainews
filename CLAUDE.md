@@ -19,6 +19,7 @@
 **변경 이력:**
 | 날짜 | 변경 내용 | 대상 | 사유 |
 |------|----------|------|------|
+| 2026-06-14 | **Issue 리포트 포털 카드 UX 개선** — digest.html에서 우측 '📄 PDF 보기(2P)' 버튼 제거하고 **리포트 제목 클릭=PDF 보기**로 변경. 제목 옆에 작은 **회색 'PDF' 박스**(`.pdfbox`)로 PDF 존재를 자연스럽게 표시(PDF 미생성 시 빨강 '준비 중'). 카드 헤더 flex(`.cardhd`)·`.dl` 버튼 CSS 제거 | webapp/build_digest_static.py, digest.html(재생성) | 사용자 요청: 제목 클릭으로 PDF 링크 + 제목 옆 작은 pdf 박스 |
 | 2026-06-14 | **본문 양쪽 정렬(justify)** — 문서 정돈감 향상을 위해 본문 산문을 왼쪽 정렬→**양쪽 정렬**로 변경(`section p, ul.tight li, .keynote li { text-align: justify; }`). 제목·출처 링크·캡션·KPI·차트 라벨은 제외. 기존 2개 리포트 재렌더링(각 2p) | skills/source-pdf-digest/assets/brief_template.html, reports/*(재생성) | 사용자 요청: 본문 양쪽 정렬로 정돈된 형식 |
 | 2026-06-14 | **푸터 브랜드 폰트 버그 수정(클래스 충돌)** — 푸터 `AI Outlook @gommilab`이 30pt로 렌더링돼 면책문구와 다른 줄에 중앙 배치되던 문제 해결. 원인=마스트헤드 워드마크용 전역 `.brand`(30pt) 규칙이 클래스명이 같은 `footer .brand`에까지 적용. 마스트헤드 규칙을 **`.masthead .brand`로 스코프 한정**해 푸터 브랜드는 8pt로 복귀 → 면책문구(왼쪽)+`AI Outlook @gommilab`(오른쪽)이 **같은 줄**에 정상 배치. 기존 2개 리포트 재렌더링(각 2p) | skills/source-pdf-digest/assets/brief_template.html, reports/*(재생성) | 사용자 요청: 푸터 좌(면책)·우(AI Outlook @gommilab) 정렬 / 렌더 버그 발견 |
 | 2026-06-14 | **마스트헤드 브랜드 태그 + KPI 폰트 축소** — ① 1페이지 마스트헤드 브랜드 워드마크 "AI Outlook" 옆에 한 칸 띄워 **회색 작은 폰트(9pt·#94a3b8)로 `@gommilab`** 표기(`.brand .tag`). ② KPI 스탯카드 수치(`.kpi .num`) 폰트를 **17pt→13.5pt**로 축소해 문서 제목(h1 17pt)보다 작게(시각 박스가 제목보다 도드라지지 않도록). 기존 2개 리포트(2026-06-12·06-14 am) 재조립·재렌더링(각 2p 유지) | skills/source-pdf-digest/assets/brief_template.html, reports/*(재생성) | 사용자 요청: 브랜드명 옆 회색 @gommilab, 시각화 박스 텍스트를 제목보다 작게 |
