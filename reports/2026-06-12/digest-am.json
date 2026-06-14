@@ -13,7 +13,8 @@
     "Project Glasswing"
   ],
   "primary_source": "Anthropic",
-  "pdf": "reports/2026-06-12/digest-am.pdf",
+  "pdf": "reports/2026-06-12/앤스로픽, Claude Fable 5·Mythos 5 공개.pdf",
   "pages": 2,
-  "generator": "GPT-5.5 draft × Opus 4.8 verify"
+  "generator": "GPT-5.5 draft × Opus 4.8 verify",
+  "pdf_name": "앤스로픽, Claude Fable 5·Mythos 5 공개.pdf"
 }

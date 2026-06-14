@@ -20,6 +20,7 @@ import json
 import os
 import re
 import shutil
+from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORKSPACE = os.path.join(ROOT, "_workspace")
@@ -59,8 +60,11 @@ def ingest_from_workspace():
             dst_dir = os.path.join(REPORTS, date)
             os.makedirs(dst_dir, exist_ok=True)
             if os.path.isfile(pdf):
-                shutil.copyfile(pdf, os.path.join(dst_dir, f"digest-{rnd}.pdf"))
-                meta["pdf"] = f"reports/{date}/digest-{rnd}.pdf"
+                # 저장 파일명 = '리포트제목.pdf' (뷰어에서 열어 저장해도 이 이름이 되도록 파일 자체를 그렇게 명명)
+                nicename = pdf_filename(meta.get("headline_ko"))
+                shutil.copyfile(pdf, os.path.join(dst_dir, nicename))
+                meta["pdf"] = f"reports/{date}/{nicename}"
+                meta["pdf_name"] = nicename
             meta["date"], meta["round"] = date, rnd
             json.dump(meta, open(os.path.join(dst_dir, f"digest-{rnd}.json"), "w",
                                  encoding="utf-8"), ensure_ascii=False, indent=2)
@@ -87,8 +91,10 @@ def load_all_reports():
                 continue
             meta.setdefault("date", date)
             meta.setdefault("round", m.group(1))
-            pdf_path = os.path.join(ddir, f"digest-{meta['round']}.pdf")
-            meta["_has_pdf"] = os.path.isfile(pdf_path)
+            pdf_rel = meta.get("pdf")
+            pdf_path = (os.path.join(ROOT, pdf_rel) if pdf_rel
+                        else os.path.join(ddir, f"digest-{meta['round']}.pdf"))
+            meta["_has_pdf"] = bool(pdf_rel) and os.path.isfile(pdf_path)
             items.append(meta)
     items.sort(key=lambda x: (x.get("date", ""), x.get("round", "")), reverse=True)
     return items
@@ -130,12 +136,11 @@ font-size:11.5px;line-height:1.55;text-align:center}
 """
 
 
-def pdf_filename(date, headline):
-    """다운로드 파일명 = '날짜 리포트제목.pdf' (파일명 불가 문자 제거)."""
+def pdf_filename(headline):
+    """다운로드/저장 파일명 = '리포트제목.pdf' (파일명 불가 문자 제거)."""
     title = re.sub(r'[\\/:*?"<>|\r\n\t]', "", str(headline or "")).strip()
-    title = re.sub(r"\s+", " ", title)
-    base = f"{date or ''} {title}".strip() or "AI-Outlook"
-    return f"{base}.pdf"
+    title = re.sub(r"\s+", " ", title) or "AI-Outlook"
+    return f"{title}.pdf"
 
 
 def render_card(it):
@@ -151,11 +156,11 @@ def render_card(it):
     rnd_badge = f'<span class="rnd">{esc(ROUND_KO.get(rnd, rnd)).upper()}</span>'
     headline = esc(it.get("headline_ko"))
     if it.get("_has_pdf") and it.get("pdf"):
-        # 제목 클릭 → PDF 보기. 옆의 'PDF' 박스 → '날짜 리포트제목.pdf' 파일명으로 다운로드
-        fname = pdf_filename(d, it.get("headline_ko"))
-        title = (f'{rnd_badge}<a class="ttl-link" href="{esc(it["pdf"])}" target="_blank">'
-                 f'{headline}</a>'
-                 f'<a class="pdfbox" href="{esc(it["pdf"])}" download="{html.escape(fname)}" '
+        # 파일 자체가 '리포트제목.pdf'로 저장돼 있어, 제목 클릭→뷰어에서 열어 저장해도 그 이름이 된다.
+        href = quote(it["pdf"], safe="/")               # 공백·한글·· 등 URL 인코딩
+        fname = it.get("pdf_name") or pdf_filename(it.get("headline_ko"))
+        title = (f'{rnd_badge}<a class="ttl-link" href="{href}" target="_blank">{headline}</a>'
+                 f'<a class="pdfbox" href="{href}" download="{html.escape(fname)}" '
                  f'title="{html.escape(fname)} 다운로드">PDF</a>')
     else:
         title = f'{rnd_badge}{headline}<span class="pdfbox pending">준비 중</span>'
