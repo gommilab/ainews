@@ -1,0 +1,28 @@
+{
+  "date": "2026-06-15",
+  "round": "am",
+  "headline_ko": "구글 딥마인드, DiffusionGemma 공개",
+  "subhead": "확산식 생성으로 H100 1,000+ tok/s 자체보고",
+  "topic_kind": "model",
+  "perspective": "research",
+  "keywords": [
+    "Google DeepMind",
+    "DiffusionGemma",
+    "Gemma 4",
+    "Hugging Face",
+    "NVIDIA"
+  ],
+  "primary_source": {
+    "name": "Google DeepMind",
+    "url": "https://blog.google/innovation-and-ai/technology/developers-tools/diffusion-gemma-faster-text-generation/",
+    "url_alt": "https://deepmind.google/models/gemma/diffusiongemma/",
+    "model_card_url": "https://ai.google.dev/gemma/docs/diffusiongemma/model_card",
+    "huggingface_url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+    "published": "2026-06-10",
+    "type": "공식 블로그 + 오픈 가중치 릴리스(모델카드)"
+  },
+  "generator": "GPT-5.5 draft × Opus 4.8 verify",
+  "pages": 2,
+  "pdf": "reports/2026-06-15/digest-am.pdf",
+  "pdf_name": "구글 딥마인드, DiffusionGemma 공개.pdf"
+}
