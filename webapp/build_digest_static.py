@@ -116,6 +116,7 @@ margin-right:6px;background:#1d4ed8;color:#fff;letter-spacing:.3px}
 .pdfbox{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;color:#64748b;
 background:#eef2f7;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;margin-left:7px;
 vertical-align:middle;text-decoration:none}
+a.pdfbox:hover{background:#e2e8f0;color:#0f172a}
 .pdfbox.pending{color:#ef4444;background:#fef2f2;border-color:#fecaca}
 .daygroup{margin-bottom:8px}
 .dayhd{font-size:13px;font-weight:800;color:#14213d;margin:18px 0 9px;padding-bottom:5px;
@@ -127,6 +128,14 @@ border-bottom:2px solid #e6e9ef}
 .foot{margin-top:30px;padding-top:14px;border-top:1px solid #e6e9ef;color:#94a3b8;
 font-size:11.5px;line-height:1.55;text-align:center}
 """
+
+
+def pdf_filename(date, headline):
+    """다운로드 파일명 = '날짜 리포트제목.pdf' (파일명 불가 문자 제거)."""
+    title = re.sub(r'[\\/:*?"<>|\r\n\t]', "", str(headline or "")).strip()
+    title = re.sub(r"\s+", " ", title)
+    base = f"{date or ''} {title}".strip() or "AI-Outlook"
+    return f"{base}.pdf"
 
 
 def render_card(it):
@@ -142,9 +151,12 @@ def render_card(it):
     rnd_badge = f'<span class="rnd">{esc(ROUND_KO.get(rnd, rnd)).upper()}</span>'
     headline = esc(it.get("headline_ko"))
     if it.get("_has_pdf") and it.get("pdf"):
-        # 제목 클릭 → PDF 보기, 제목 옆 작은 회색 'PDF' 박스로 문서 존재를 표시
+        # 제목 클릭 → PDF 보기. 옆의 'PDF' 박스 → '날짜 리포트제목.pdf' 파일명으로 다운로드
+        fname = pdf_filename(d, it.get("headline_ko"))
         title = (f'{rnd_badge}<a class="ttl-link" href="{esc(it["pdf"])}" target="_blank">'
-                 f'{headline}<span class="pdfbox">PDF</span></a>')
+                 f'{headline}</a>'
+                 f'<a class="pdfbox" href="{esc(it["pdf"])}" download="{html.escape(fname)}" '
+                 f'title="{html.escape(fname)} 다운로드">PDF</a>')
     else:
         title = f'{rnd_badge}{headline}<span class="pdfbox pending">준비 중</span>'
     return f"""<div class="card">
