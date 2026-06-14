@@ -1,0 +1,77 @@
+{
+  "date": "2026-06-15",
+  "count": 7,
+  "items": [
+    {
+      "rank": 1,
+      "title_ko": "앤트로픽 최신 모델 해외 사용 중단은 아마존 제보가 발단",
+      "title_orig": "앤트로픽 최신 모델 해외 사용 중단은 아마존 제보가 발단",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=211701",
+      "published": "2026-06-14",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 2,
+      "title_ko": "[AI 핫이슈] 앤트로픽 '페이블·미토스' 수출통제 후폭풍…글로벌 AI 판세 변수로",
+      "title_orig": "[AI핫이슈] 앤트로픽 페이블 수출통제 후폭풍...글로벌 AI 판세 변수로",
+      "source": "디지털투데이",
+      "url": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=674909",
+      "published": "2026-06-15",
+      "category": "규제",
+      "section": "domestic"
+    },
+    {
+      "rank": 3,
+      "title_ko": "아티피셜 애널리시스, '딥SWE' 벤치마크 도입...'페이블 5' 코딩 1위 등극",
+      "title_orig": "아티피셜 애널리시스, '딥SWE' 벤치마크 도입...'페이블 5' 코딩 1위 등극",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=211706",
+      "published": "2026-06-14",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 4,
+      "title_ko": "베이조스의 AI 스타트업 프로메테우스, 몸값 62조 기록…\"인공 일반 엔지니어 개발 중\"",
+      "title_orig": "베이조스의 AI 스타트업 프로메테우스, 몸값 62조 기록…\"인공 일반 엔지니어 개발 중\"",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=211708",
+      "published": "2026-06-14",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 5,
+      "title_ko": "구글 DiffusionGemma-26B-A4B, 자기회귀 아닌 '확산'으로 토큰 생성하는 멀티모달 LLM 트렌딩 1위",
+      "title_orig": "google/diffusiongemma-26B-A4B-it",
+      "source": "Hugging Face",
+      "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+      "published": "2026-06-15",
+      "category": "huggingface",
+      "section": "tech"
+    },
+    {
+      "rank": 6,
+      "title_ko": "NVIDIA/SkillSpector — AI 에이전트 스킬용 보안 스캐너",
+      "title_orig": "NVIDIA/SkillSpector — Security scanner for AI agent skills",
+      "source": "GitHub",
+      "url": "https://github.com/NVIDIA/SkillSpector",
+      "published": "2026-06-15",
+      "category": "github",
+      "section": "tech"
+    },
+    {
+      "rank": 7,
+      "title_ko": "andrewyng/aisuite — 여러 생성형 AI 공급자를 하나로 묶는 통합 인터페이스",
+      "title_orig": "andrewyng/aisuite — Simple, unified interface to multiple Generative AI providers",
+      "source": "GitHub",
+      "url": "https://github.com/andrewyng/aisuite",
+      "published": "2026-06-15",
+      "category": "github",
+      "section": "tech"
+    }
+  ],
+  "generator": "aggregate_top20"
+}
