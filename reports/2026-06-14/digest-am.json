@@ -1,14 +1,14 @@
 {
   "date": "2026-06-14",
   "round": "am",
-  "headline_ko": "미 정부, Fable 5·Mythos 5 외국인 차단",
-  "subhead": "앤트로픽, Fable 5·Mythos 5 접근 전면 중단",
+  "headline_ko": "미 정부, Fable 5·Mythos 5 차단 지시",
+  "subhead": "외국 국적자 접근 제한에 전면 중단",
   "topic_kind": "mixed",
   "perspective": "both(정책 주관점)",
   "keywords": [
     "Anthropic",
-    "Fable 5",
-    "Mythos 5",
+    "Claude Fable 5",
+    "Claude Mythos 5",
     "Commerce Department",
     "Pliny the Liberator"
   ],

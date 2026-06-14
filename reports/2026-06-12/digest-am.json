@@ -1,19 +1,19 @@
 {
   "date": "2026-06-12",
   "round": "am",
-  "headline_ko": "앤스로픽, 프런티어 모델 Claude Fable 5·Mythos 5 공개",
-  "subhead": "SOTA 성능과 이중용도 안전장치를 함께 구현한 신규 모델 계층",
+  "headline_ko": "앤스로픽, Claude Fable 5·Mythos 5 공개",
+  "subhead": "Opus 상위 Mythos급 일반·제한판 동시 출시",
   "topic_kind": "model",
-  "perspective": "research — 연구자 관점에서 성능·안전성·접근성 변화에 주목",
+  "perspective": "both(연구·정책)",
   "keywords": [
     "Anthropic",
     "Claude Fable 5",
     "Claude Mythos 5",
-    "Opus 4.8",
-    "SWE-bench Pro"
+    "Mythos급",
+    "Project Glasswing"
   ],
   "primary_source": "Anthropic",
   "pdf": "reports/2026-06-12/digest-am.pdf",
   "pages": 2,
-  "generator": "openai:gpt-4.1"
+  "generator": "GPT-5.5 draft × Opus 4.8 verify"
 }
