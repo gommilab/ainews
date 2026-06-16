@@ -1,0 +1,137 @@
+{
+  "date": "2026-06-17",
+  "count": 13,
+  "items": [
+    {
+      "rank": 1,
+      "title_ko": "스페이스X, AI 코딩 스타트업 커서(Cursor)를 600억 달러 주식교환으로 인수",
+      "title_orig": "SpaceX to acquire Cursor for $60B in stock, days after blockbuster IPO",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/06/16/spacex-to-acquire-cursor-for-60b-in-stock-days-after-blockbuster-ipo/",
+      "published": "2026-06-16",
+      "category": "투자/M&A",
+      "section": "global"
+    },
+    {
+      "rank": 2,
+      "title_ko": "KKR·쿠웨이트투자청·엔비디아 참여…헬릭스, '원스톱' AI 데이터센터로 승부수",
+      "title_orig": "KKR·쿠웨이트투자청·엔비디아 참여…헬릭스, '원스톱' AI 데이터센터로 승부수",
+      "source": "토큰포스트",
+      "url": "https://www.tokenpost.kr/news/ai/368903",
+      "published": "2026-06-16",
+      "category": "반도체",
+      "section": "domestic"
+    },
+    {
+      "rank": 3,
+      "title_ko": "지푸AI, 100만 토큰 컨텍스트 창 'GLM-5.2' 출시…벤치마크는 미공개",
+      "title_orig": "지푸AI, 100만 토큰 컨텍스트 창 'GLM-5.2' 출시...벤치마크는 미공개",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=211778",
+      "published": "2026-06-16",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 4,
+      "title_ko": "앤트로픽, '클로드 맥스' 허위 광고 집단소송 직면…\"광고한 토큰 용량 못 미쳐\"",
+      "title_orig": "앤트로픽, '클로드 맥스' 허위 광고 집단소송 직면..\"토큰 용량 못 미쳐\"",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=211752",
+      "published": "2026-06-16",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 5,
+      "title_ko": "엔비디아 회사채에 850억달러 몰렸다…AI 투자 열풍에 자금시장도 들썩",
+      "title_orig": "엔비디아 회사채에 850억달러 몰렸다…AI 투자 열풍에 자금시장도 들썩",
+      "source": "블록미디어",
+      "url": "https://www.blockmedia.co.kr/archives/1106013",
+      "published": "2026-06-16",
+      "category": "투자",
+      "section": "domestic"
+    },
+    {
+      "rank": 6,
+      "title_ko": "MiniMax-M3 공개 — 희소 어텐션(MSA)으로 1M 컨텍스트 추론·디코딩 대폭 가속한 네이티브 멀티모달 모델",
+      "title_orig": "MiniMax-M3",
+      "source": "Hugging Face",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3",
+      "published": "2026-06-16",
+      "category": "huggingface",
+      "section": "tech"
+    },
+    {
+      "rank": 7,
+      "title_ko": "VibeThinker-3B — 3B 소형 모델로 AIME26 94.3·LiveCodeBench 80.2 달성한 '검증 가능한 추론' 연구",
+      "title_orig": "VibeThinker-3B: Exploring the Frontier of Verifiable Reasoning in Small Language Models",
+      "source": "Hugging Face",
+      "url": "https://huggingface.co/papers/2606.16140",
+      "published": "2026-06-16",
+      "category": "huggingface",
+      "section": "tech"
+    },
+    {
+      "rank": 8,
+      "title_ko": "OpenBMB/VoxCPM — 토크나이저 없는 다국어 음성합성 모델 VoxCPM2",
+      "title_orig": "OpenBMB/VoxCPM — VoxCPM2: Tokenizer-Free TTS for Multilingual Speech Generation",
+      "source": "GitHub",
+      "url": "https://github.com/OpenBMB/VoxCPM",
+      "published": "2026-06-17",
+      "category": "github",
+      "section": "tech"
+    },
+    {
+      "rank": 9,
+      "title_ko": "엔비디아, AI '추론' 시장서도 점유율 확대…1년 새 66%→74%",
+      "title_orig": "엔비디아, AI '추론' 시장서도 점유율 확대...1년 간 66%→74% 성장",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=211788",
+      "published": "2026-06-16",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 10,
+      "title_ko": "미 정부 '앤트로픽 AI 차단'에 반사 효과?…비텐서 TAO 일주일 새 30% 급등",
+      "title_orig": "미 정부 '앤트로픽 AI 차단'에 반사 효과?… TAO 일주일 새 30% 급등",
+      "source": "블록미디어",
+      "url": "https://www.blockmedia.co.kr/archives/1106056",
+      "published": "2026-06-16",
+      "category": "블록체인",
+      "section": "domestic"
+    },
+    {
+      "rank": 11,
+      "title_ko": "Nemotron 3 Ultra: 에이전트 추론용 오픈 MoE 하이브리드 Mamba-Transformer 모델",
+      "title_orig": "Nemotron 3 Ultra: Open, Efficient Mixture-of-Experts Hybrid Mamba-Transformer Model for Agentic Reasoning",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2606.15007",
+      "published": "2026-06-12",
+      "category": "arxiv",
+      "section": "tech"
+    },
+    {
+      "rank": 12,
+      "title_ko": "Panniantong/Agent-Reach — AI 에이전트에 '인터넷의 눈'을 달아주는 단일 CLI",
+      "title_orig": "Panniantong/Agent-Reach — Give your AI agent eyes to see the entire internet",
+      "source": "GitHub",
+      "url": "https://github.com/Panniantong/Agent-Reach",
+      "published": "2026-06-17",
+      "category": "github",
+      "section": "tech"
+    },
+    {
+      "rank": 13,
+      "title_ko": "QPILOTS: 플로우 정책을 위한 효율적 테스트타임 Q-스티어링",
+      "title_orig": "QPILOTS: Efficient Test-Time Q-Steering for Flow Policies",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2606.14801",
+      "published": "2026-06-11",
+      "category": "arxiv",
+      "section": "tech"
+    }
+  ],
+  "generator": "aggregate_top20"
+}
