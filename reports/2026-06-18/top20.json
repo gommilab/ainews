@@ -1,0 +1,167 @@
+{
+  "date": "2026-06-18",
+  "count": 16,
+  "items": [
+    {
+      "rank": 1,
+      "title_ko": "프라마나랩스, 코슬라벤처스 주도 2,700만 달러 시드 — AI에 '형식 검증' 결합",
+      "title_orig": "Pramaana Labs raises $27M seed round from Khosla Ventures to bring formal verification to AI",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/06/17/pramaana-labs-raises-27-million-seed-round-from-khosla-ventures-to-bring-formal-verification-to-ai/",
+      "published": "2026-06-17",
+      "category": "투자/M&A",
+      "section": "global"
+    },
+    {
+      "rank": 2,
+      "title_ko": "스페이스X, IPO 직후 90조에 커서 인수…\"공동 개발 모델 곧 공개\"",
+      "title_orig": "스페이스X, IPO 직후 90조에 커서 인수…\"공동 개발 모델 곧 공개\"",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=211806",
+      "published": "2026-06-17",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 3,
+      "title_ko": "세계 모델 개발 오디세이, AWS 손잡고 3억1천만달러 투자 유치",
+      "title_orig": "세계 모델 개발 오디세이, AWS 손잡고 3억1천만달러 투자 유치",
+      "source": "토큰포스트",
+      "url": "https://www.tokenpost.kr/news/ai/370485",
+      "published": "2026-06-18",
+      "category": "투자",
+      "section": "domestic"
+    },
+    {
+      "rank": 4,
+      "title_ko": "통신 넘어 AI 인프라로…SKT, 엔비디아와 'AI 팩토리' 승부수",
+      "title_orig": "통신 넘어 AI 인프라로...SKT, 엔비디아와 'AI 팩토리' 승부수",
+      "source": "디지털투데이",
+      "url": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=675421",
+      "published": "2026-06-17",
+      "category": "반도체",
+      "section": "domestic"
+    },
+    {
+      "rank": 5,
+      "title_ko": "EU AI법, 8월 2일 전면 적용 임박…범용 AI(GPAI) 집행·모델 리콜 권한 발동 카운트다운",
+      "title_orig": "",
+      "source": "EU 정책",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+      "published": "2026-06-18",
+      "category": "policy",
+      "section": "policy"
+    },
+    {
+      "rank": 6,
+      "title_ko": "영국, 'AI 성장 랩' 규제 샌드박스 추진…AI보안연구소 법정기구화·AI법 입법은 신중 검토",
+      "title_orig": "",
+      "source": "영국 정책",
+      "url": "https://www.whitecase.com/insight-our-thinking/ai-watch-global-regulatory-tracker-united-kingdom",
+      "published": "2026-06-18",
+      "category": "policy",
+      "section": "policy"
+    },
+    {
+      "rank": 7,
+      "title_ko": "앤트로픽 서울 사무소 공식 개소…\"수출 통제 리스크 없을 것\"",
+      "title_orig": "앤트로픽 서울 사무소 공식 개소...\"수출 통제 리스크 없을 것\"",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=211840",
+      "published": "2026-06-18",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 8,
+      "title_ko": "google-research/timesfm — 구글의 시계열 예측 파운데이션 모델, 일일 트렌딩 급부상",
+      "title_orig": "google-research/timesfm — A pretrained time-series foundation model for forecasting by Google Research",
+      "source": "GitHub",
+      "url": "https://github.com/google-research/timesfm",
+      "published": "2026-06-18",
+      "category": "github",
+      "section": "tech"
+    },
+    {
+      "rank": 9,
+      "title_ko": "'챗GPT' 독주 흔들…글로벌 점유율 사상 첫 50% 아래로",
+      "title_orig": "'챗GPT' 독주 흔들…글로벌 점유율 사상 첫 50% 아래로",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=211810",
+      "published": "2026-06-17",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 10,
+      "title_ko": "앤트로픽 서울사무소 출범부터 시험대…\"수출통제 며칠 내 해소\"",
+      "title_orig": "앤트로픽 서울사무소 출발부터 시험대..\"수출통제 며칠 내 해소\"",
+      "source": "디지털투데이",
+      "url": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=676033",
+      "published": "2026-06-18",
+      "category": "정책",
+      "section": "domestic"
+    },
+    {
+      "rank": 11,
+      "title_ko": "일본, '신뢰할 수 있는 AI' 기본계획 본격 가동…METI, FY2026 AI 개발에 3,873억엔 배정",
+      "title_orig": "",
+      "source": "일본 정책",
+      "url": "https://www.whitecase.com/insight-alert/japans-first-ai-legislation-becomes-law-focus-promoting-research-and-development-no",
+      "published": "2026-06-18",
+      "category": "policy",
+      "section": "policy"
+    },
+    {
+      "rank": 12,
+      "title_ko": "GLM-5.2 공개 — Z.ai의 753B 플래그십, 1M 컨텍스트·장기과제 성능 도약",
+      "title_orig": "GLM-5.2",
+      "source": "Hugging Face",
+      "url": "https://huggingface.co/zai-org/GLM-5.2",
+      "published": "2026-06-17",
+      "category": "huggingface",
+      "section": "tech"
+    },
+    {
+      "rank": 13,
+      "title_ko": "LoopCoder-v2: '한 번만 루프'로 테스트타임 연산 확장을 효율화 (HF Daily Papers 1위)",
+      "title_orig": "LoopCoder-v2: Only Loop Once for Efficient Test-Time Computation Scaling",
+      "source": "Hugging Face",
+      "url": "https://huggingface.co/papers/2606.18023",
+      "published": "2026-06-17",
+      "category": "huggingface",
+      "section": "tech"
+    },
+    {
+      "rank": 14,
+      "title_ko": "OpenBMB/VoxCPM — 토크나이저 없는 확산형 TTS, 다국어 음성합성으로 트렌딩",
+      "title_orig": "OpenBMB/VoxCPM — Tokenizer-free TTS for multilingual speech generation and voice cloning",
+      "source": "GitHub",
+      "url": "https://github.com/OpenBMB/VoxCPM",
+      "published": "2026-06-18",
+      "category": "github",
+      "section": "tech"
+    },
+    {
+      "rank": 15,
+      "title_ko": "LoopCoder-v2: 한 번만 반복해 테스트타임 연산을 효율적으로 확장하기",
+      "title_orig": "LoopCoder-v2: Only Loop Once for Efficient Test-Time Computation Scaling",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2606.18023",
+      "published": "2026-06-16",
+      "category": "arxiv",
+      "section": "tech"
+    },
+    {
+      "rank": 16,
+      "title_ko": "ACE-Ego-0: VLA 사전학습을 위한 에고센트릭 인간 데이터와 로봇 데이터의 통합",
+      "title_orig": "ACE-Ego-0: Unifying Egocentric Human and Robotic Data for VLA Pretraining",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2606.17200",
+      "published": "2026-06-15",
+      "category": "arxiv",
+      "section": "tech"
+    }
+  ],
+  "generator": "aggregate_top20"
+}
