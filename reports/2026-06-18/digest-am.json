@@ -1,0 +1,20 @@
+{
+  "date": "2026-06-18",
+  "round": "am",
+  "headline_ko": "Z.ai, GLM-5.2 오픈웨이트 공개",
+  "subhead": "1M 컨텍스트·MIT 라이선스",
+  "keywords": [
+    "Z.ai",
+    "GLM-5.2",
+    "IndexShare",
+    "GLM-5.1",
+    "GPT-5.5"
+  ],
+  "topic_kind": "model",
+  "perspective": "both(연구·개발 주관점)",
+  "primary_source": "Z.ai (zai-org)",
+  "generator": "GPT-5.5 draft × Opus 4.8 verify",
+  "pdf": "reports/2026-06-18/digest-am.pdf",
+  "pages": 2,
+  "pdf_name": "Z.ai, GLM-5.2 오픈웨이트 공개.pdf"
+}
