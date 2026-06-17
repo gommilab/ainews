@@ -1,0 +1,20 @@
+{
+  "date": "2026-06-17",
+  "round": "am",
+  "headline_ko": "Agent-Reach, 인터넷 읽기 CLI 공개",
+  "subtitle": "플랫폼별 CLI 자동 선택·폴백",
+  "keywords": [
+    "Agent-Reach",
+    "Panniantong",
+    "Exa",
+    "Jina Reader",
+    "mcporter"
+  ],
+  "topic_kind": "tech",
+  "perspective": "research",
+  "primary_source": "GitHub — Panniantong/Agent-Reach",
+  "generator": "GPT-5.5 draft × Opus 4.8 verify",
+  "pdf": "reports/2026-06-17/digest-am.pdf",
+  "pages": 2,
+  "pdf_name": "Agent-Reach, 인터넷 읽기 CLI 공개.pdf"
+}
