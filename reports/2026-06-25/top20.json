@@ -1,0 +1,157 @@
+{
+  "date": "2026-06-25",
+  "count": 15,
+  "items": [
+    {
+      "rank": 1,
+      "title_ko": "오픈AI, 브로드컴과 만든 첫 자체 추론칩 '할라페뇨(Jalapeño)' 공개",
+      "title_orig": "OpenAI unveils its first custom chip, built by Broadcom",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/06/24/openai-unveils-its-first-custom-chip-built-by-broadcom/",
+      "published": "2026-06-24",
+      "category": "반도체·인프라",
+      "section": "global"
+    },
+    {
+      "rank": 2,
+      "title_ko": "세레브라스, 실적 발표 후 주가 약 20% 급락… 마진 가이던스 실망",
+      "title_orig": "Cerebras stock plunges after earnings as CEO says margin outlook was misunderstood",
+      "source": "TechCrunch·CNBC",
+      "url": "https://techcrunch.com/2026/06/24/cerebras-stock-plunges-after-earnings-as-ceo-says-margin-outlook-was-misunderstood/",
+      "published": "2026-06-24",
+      "category": "반도체·인프라",
+      "section": "global"
+    },
+    {
+      "rank": 3,
+      "title_ko": "구글 제미나이 핵심 연구자들 잇따라 앤스로픽行… AI 인재 쟁탈전 격화",
+      "title_orig": "AI researchers continue to leave Google for its rivals",
+      "source": "TechCrunch·Bloomberg",
+      "url": "https://techcrunch.com/2026/06/24/ai-researchers-continue-to-leave-google-for-its-rivals/",
+      "published": "2026-06-24",
+      "category": "노동시장",
+      "section": "global"
+    },
+    {
+      "rank": 4,
+      "title_ko": "오픈AI·브로드컴, 첫 커스텀 AI 칩 '할라페뇨' 공개…\"일반 GPU 대비 비용 절반\"",
+      "title_orig": "OpenAI, Broadcom Unveil Jalapeno AI Chip Promising Faster, Cheaper Model Runs",
+      "source": "Bloomberg",
+      "url": "https://www.bloomberg.com/news/articles/2026-06-24/openai-and-broadcom-unveil-ai-chip-to-run-models-faster-cheaper",
+      "published": "2026-06-24",
+      "category": "반도체",
+      "section": "domestic"
+    },
+    {
+      "rank": 5,
+      "title_ko": "구글, '제미나이 3.5 프로' 출시 연기...타사와 성능 격차 부담됐나",
+      "title_orig": "구글, '제미나이 3.5 프로' 출시 연기...타사와 성능 격차 부담됐나",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=212099",
+      "published": "2026-06-25",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 6,
+      "title_ko": "오픈AI, 자체 개발 '추론 칩' 공개… \"9개월 만에 테이프아웃\"",
+      "title_orig": "오픈AI, 자체 개발 '추론 칩' 공개… \"9개월 만에 테이프아웃\"",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=212074",
+      "published": "2026-06-25",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 7,
+      "title_ko": "구글, AI 핵심 인력 잇단 이탈로 주도권 위기…앤트로픽·오픈AI로 줄이직",
+      "title_orig": "구글, AI 핵심 인력 잇단 이탈로 주도권 위기?",
+      "source": "토큰포스트",
+      "url": "https://www.tokenpost.kr/news/tech/372655",
+      "published": "2026-06-25",
+      "category": "투자",
+      "section": "domestic"
+    },
+    {
+      "rank": 8,
+      "title_ko": "스페이스X 첫 회사채 250억 달러 발행…AI 사업 확대 자금에 투자자는 신중",
+      "title_orig": "스페이스엑스의 첫 회사채 발행, 투자자의 신중한 평가 드러나",
+      "source": "토큰포스트",
+      "url": "https://www.tokenpost.kr/news/economy/372246",
+      "published": "2026-06-24",
+      "category": "투자",
+      "section": "domestic"
+    },
+    {
+      "rank": 9,
+      "title_ko": "SK하이닉스, 45조 규모 미국 IPO 추진...7월10일 상장 목표",
+      "title_orig": "SK하이닉스, 45조 규모 미국 IPO 추진...7월10일 상장 목표",
+      "source": "AI타임스",
+      "url": "https://www.aitimes.com/news/articleView.html?idxno=212102",
+      "published": "2026-06-25",
+      "category": "aitimes",
+      "section": "aitimes"
+    },
+    {
+      "rank": 10,
+      "title_ko": "순환 디노이징(Cyclic Denoising): 확산모델 속 '초안정 기억'을 드러내 학습 이미지를 추출하다",
+      "title_orig": "Cyclic Denoising Reveals Ultrastable Memories in Diffusion Models",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2606.24000",
+      "published": "2026-06-22",
+      "category": "arxiv",
+      "section": "tech"
+    },
+    {
+      "rank": 11,
+      "title_ko": "에이전트 네이티브 메모리 시스템, 우리는 준비됐는가? (Are We Ready For An Agent-Native Memory System?)",
+      "title_orig": "Are We Ready For An Agent-Native Memory System?",
+      "source": "Hugging Face",
+      "url": "https://huggingface.co/papers/2606.24775",
+      "published": "2026-06-24",
+      "category": "huggingface",
+      "section": "tech"
+    },
+    {
+      "rank": 12,
+      "title_ko": "calesthio/OpenMontage — 세계 첫 오픈소스 에이전트형 영상 제작 시스템",
+      "title_orig": "calesthio/OpenMontage — World's first open-source, agentic video production system",
+      "source": "GitHub",
+      "url": "https://github.com/calesthio/OpenMontage",
+      "published": "2026-06-25",
+      "category": "github",
+      "section": "tech"
+    },
+    {
+      "rank": 13,
+      "title_ko": "NousResearch/hermes-agent — 사용자와 함께 성장하는 자기개선형 AI 에이전트",
+      "title_orig": "NousResearch/hermes-agent — The agent that grows with you",
+      "source": "GitHub",
+      "url": "https://github.com/NousResearch/hermes-agent",
+      "published": "2026-06-25",
+      "category": "github",
+      "section": "tech"
+    },
+    {
+      "rank": 14,
+      "title_ko": "전체론적 데이터 스케줄러(HDS): 다목적 강화학습으로 LLM 사전학습 데이터 배합 최적화",
+      "title_orig": "Holistic Data Scheduler for LLM Pre-training via Multi-Objective Reinforcement Learning",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2606.24133",
+      "published": "2026-06-23",
+      "category": "arxiv",
+      "section": "tech"
+    },
+    {
+      "rank": 15,
+      "title_ko": "NL2Code를 넘어서: 멀티모달 코드 인텔리전스에 관한 구조적 서베이 (Beyond NL2Code)",
+      "title_orig": "Beyond NL2Code: A Structured Survey of Multimodal Code Intelligence",
+      "source": "Hugging Face",
+      "url": "https://huggingface.co/papers/2606.15932",
+      "published": "2026-06-17",
+      "category": "huggingface",
+      "section": "tech"
+    }
+  ],
+  "generator": "aggregate_top20"
+}
