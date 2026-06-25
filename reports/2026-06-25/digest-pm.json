@@ -1,0 +1,27 @@
+{
+  "date": "2026-06-25",
+  "round": "pm",
+  "headline_ko": "오픈AI·브로드컴 첫 자체 추론칩 '할라페뇨' 공개",
+  "subhead": "9개월 테이프아웃·비용 50% 절감 주장(자체보고·독립검증 전)",
+  "topic_kind": "infra",
+  "perspective": "both(주: 🏛 정책 — 공급망·시장 구도)",
+  "keywords": [
+    "OpenAI",
+    "Broadcom",
+    "Jalapeño",
+    "HBM3e",
+    "Nvidia"
+  ],
+  "primary_source": {
+    "name": "OpenAI / Broadcom",
+    "url": "https://openai.com/index/openai-broadcom-jalapeno-inference-chip/",
+    "published": "2026-06-24",
+    "type": "공식 발표(기업 공식 블로그·보도자료)"
+  },
+  "generator": "GPT-5.5 draft × Opus 4.8 verify",
+  "html": "05_digest.html",
+  "pdf": "reports/2026-06-25/digest-pm.pdf",
+  "image": "image.png",
+  "pages": 2,
+  "pdf_name": "오픈AI·브로드컴 첫 자체 추론칩 '할라페뇨' 공개.pdf"
+}
